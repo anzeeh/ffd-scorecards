@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenya FfD Scorecard 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1923;
+    --paper: #f5f0e8;
+    --paper2: #ede8df;
+    --accent: #c8473a;
+    --gold: #c9a227;
+    --green: #2a6b3c;
+    --blue: #1a4a7a;
+    --teal: #1a6b6b;
+    --orange: #b85c1a;
+    --purple: #5a2a7a;
+    --muted: #6b6555;
+    --border: #cdc5b2;
+    --score1: #c0392b;
+    --score2: #e67e22;
+    --score3: #f1c40f;
+    --score4: #27ae60;
+    --score5: #1a7a4a;
+    --score-na: #9e9485;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  .cover {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 56px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,71,58,0.18) 0%, transparent 70%);
+  }
+  .cover-flag { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  
+          .flag-kenya {
+            width: 48px; height: 32px;
+            background: linear-gradient(to bottom, #000 0 33%, #fff 33% 38%, #b00 38% 62%, #fff 62% 67%, #006a2e 67% 100%);
+            border-radius: 4px;
+          }
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900; line-height: 1.1; margin-bottom: 8px;
+  }
+  .cover-title span { color: var(--accent); }
+  .cover-sub { font-size: 15px; color: rgba(245,240,232,0.7); font-weight: 300; margin-bottom: 32px; }
+  .cover-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+  .cover-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .cover-meta-item .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    color: rgba(245,240,232,0.45); text-transform: uppercase;
+  }
+  .cover-meta-item .value { font-size: 14px; font-weight: 500; color: var(--paper); }
+  .score-banner {
+    background: var(--ink);
+    padding: 0 48px 40px;
+    display: flex; align-items: flex-end; gap: 40px; flex-wrap: wrap;
+  }
+  .overall-score-ring { position: relative; flex-shrink: 0; }
+  .overall-score-ring svg { display: block; }
+  .ring-inner {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); text-align: center;
+  }
+  .ring-inner .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px; font-weight: 900; color: var(--paper); line-height: 1;
+  }
+  .ring-inner .denom { font-size: 13px; color: rgba(245,240,232,0.45); }
+  .ring-inner .rating {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--gold); text-transform: uppercase; margin-top: 4px;
+  }
+  .pillar-scores { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  .pillar-bar-row { display: flex; align-items: center; gap: 12px; }
+  .pillar-bar-label {
+    font-size: 11px; font-weight: 500;
+    color: rgba(245,240,232,0.7); width: 220px; flex-shrink: 0;
+  }
+  .pillar-bar-track {
+    flex: 1; height: 8px;
+    background: rgba(245,240,232,0.12);
+    border-radius: 4px; overflow: hidden;
+  }
+  .pillar-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+  .pillar-bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 500; color: var(--paper);
+    width: 36px; text-align: right;
+  }
+  .context-strip {
+    background: var(--gold);
+    padding: 14px 48px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .context-strip .icon { font-size: 18px; }
+  .context-strip p { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.5; }
+  .context-strip strong { font-weight: 700; }
+  .caveat-banner {
+    background: #fffbf0;
+    border: 1px solid var(--gold);
+    border-left: 4px solid var(--orange);
+    padding: 14px 20px;
+    margin: 24px 0 32px;
+    display: flex; align-items: flex-start; gap: 12px;
+    border-radius: 6px;
+  }
+  .caveat-banner.caveat-full {
+    border-left-color: var(--green);
+    background: #f4faf5;
+    border-color: var(--green);
+  }
+  .caveat-banner .caveat-icon { font-size: 20px; line-height: 1.2; flex-shrink: 0; }
+  .caveat-banner p { font-size: 12.5px; line-height: 1.6; color: var(--ink); }
+  .caveat-banner strong { color: var(--ink); }
+  .caveat-banner em { font-style: italic; color: var(--orange); }
+  .main { padding: 40px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px; margin-top: 40px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--border);
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+  }
+  .section-header .data-note {
+    font-size: 11px; color: var(--muted); font-style: italic;
+  }
+  .section-header .score-chip {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 500;
+    padding: 4px 14px; border-radius: 20px;
+    background: var(--ink); color: var(--paper);
+  }
+  .indicators-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px; margin-bottom: 8px;
+  }
+  .card {
+    background: white; border-radius: 12px; padding: 20px;
+    border: 1.5px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover { box-shadow: 0 8px 24px rgba(15,25,35,0.1); transform: translateY(-2px); }
+  .card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+  }
+  .card-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 13.5px; font-weight: 600;
+    line-height: 1.4; margin-bottom: 14px; color: var(--ink);
+  }
+  .card-values {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 12px;
+  }
+  .card-current { display: flex; flex-direction: column; gap: 2px; }
+  .card-current .label {
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .card-current .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 700; line-height: 1;
+  }
+  .card-current .unit { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .card-score-badge {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 900; color: white; flex-shrink: 0;
+  }
+  .card-benchmark {
+    background: var(--paper); border-radius: 6px;
+    padding: 7px 10px; font-size: 11.5px;
+    color: var(--muted); line-height: 1.4; margin-bottom: 10px;
+  }
+  .card-benchmark strong { color: var(--ink); font-weight: 600; }
+  .card-conversation {
+    background: #fffbf0;
+    border: 1px dashed var(--gold);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11.5px; color: #7a5c00; line-height: 1.5;
+  }
+  .card-conversation::before { content: '💬 '; }
+  .card-source { margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+  .card-source a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--blue);
+    text-decoration: none; letter-spacing: 0.5px;
+  }
+  .card-source a:hover { text-decoration: underline; }
+  .s1 { background: var(--score1); }
+  .s2 { background: var(--score2); }
+  .s3 { background: var(--score3); color: var(--ink) !important; }
+  .s4 { background: var(--score4); }
+  .s5 { background: var(--score5); }
+  .s-na { background: var(--score-na); font-size: 14px !important; }
+  .border1::before { background: var(--score1); }
+  .border2::before { background: var(--score2); }
+  .border3::before { background: var(--score3); }
+  .border4::before { background: var(--score4); }
+  .border5::before { background: var(--score5); }
+  .border-na::before { background: var(--score-na); }
+  .dot-flows { background: var(--green); }
+  .dot-exp   { background: var(--orange); }
+  .dot-eff   { background: var(--purple); }
+  .dot-env   { background: var(--teal); }
+  .dot-fin   { background: var(--blue); }
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px; margin-bottom: 40px;
+  }
+  .finding-card {
+    background: var(--ink); color: var(--paper);
+    border-radius: 12px; padding: 22px;
+  }
+  .finding-card .finding-icon { font-size: 24px; margin-bottom: 10px; }
+  .finding-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 8px; color: var(--gold);
+  }
+  .finding-card p { font-size: 12.5px; line-height: 1.6; color: rgba(245,240,232,0.8); }
+  .legend {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11.5px; color: var(--muted);
+  }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.5);
+    padding: 24px 48px;
+    font-size: 11px; line-height: 1.6;
+    margin-top: 48px;
+  }
+  .footer strong { color: rgba(245,240,232,0.8); }
+  @media (max-width: 640px) {
+    .cover, .main, .score-banner { padding-left: 24px; padding-right: 24px; }
+    .pillar-bar-label { width: 120px; font-size: 10px; }
+    .context-strip { padding-left: 24px; padding-right: 24px; }
+    .indicators-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-flag">
+    <div class="flag-kenya"></div>
+    <span class="cover-label">Financing for Development</span>
+  </div>
+  <div class="cover-title">Kenya<br><span>FfD Scorecard</span></div>
+  <div class="cover-sub">Country-Level Assessment · Conversation Starter for Donors &amp; Government</div>
+  <div class="cover-meta">
+    
+        <div class="cover-meta-item">
+          <span class="label">Reference Year</span>
+          <span class="value">FY2023–24</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">GDP (Nominal)</span>
+          <span class="value">~$115bn USD</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Population</span>
+          <span class="value">56 million</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Debt/GDP</span>
+          <span class="value">67.8% (Jun 2025)</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">IMF Programme</span>
+          <span class="value">ECF/EFF (expired Apr 2025)</span>
+        </div>
+  </div>
+</div>
+
+<div class="score-banner">
+  <div class="overall-score-ring">
+    <svg width="130" height="130" viewBox="0 0 130 130">
+      <circle cx="65" cy="65" r="56" fill="none" stroke="rgba(245,240,232,0.1)" stroke-width="10"></circle>
+      <circle cx="65" cy="65" r="56" fill="none" stroke="#c9a227" stroke-width="10"
+              stroke-dasharray="351.9" stroke-dashoffset="126.7"
+              stroke-linecap="round" transform="rotate(-90 65 65)"></circle>
+    </svg>
+    <div class="ring-inner">
+      <div class="num">3.2</div>
+      <div class="denom">out of 5</div>
+      <div class="rating">Moderate</div>
+    </div>
+  </div>
+  <div class="pillar-scores">
+    
+        <div class="pillar-bar-row">
+          <span class="pillar-bar-label">I — Flows</span>
+          <div class="pillar-bar-track">
+            <div class="pillar-bar-fill" style="width:60.0%;background:#2a6b3c;"></div>
+          </div>
+          <span class="pillar-bar-val">3.0</span>
+        </div>
+        <div class="pillar-bar-row">
+          <span class="pillar-bar-label">II — Expenditure</span>
+          <div class="pillar-bar-track">
+            <div class="pillar-bar-fill" style="width:54.0%;background:#b85c1a;"></div>
+          </div>
+          <span class="pillar-bar-val">2.7</span>
+        </div>
+        <div class="pillar-bar-row">
+          <span class="pillar-bar-label">III — Spending Effectiveness</span>
+          <div class="pillar-bar-track">
+            <div class="pillar-bar-fill" style="width:80.0%;background:#5a2a7a;"></div>
+          </div>
+          <span class="pillar-bar-val">4.0</span>
+        </div>
+        <div class="pillar-bar-row">
+          <span class="pillar-bar-label">IV — Enabling Environment</span>
+          <div class="pillar-bar-track">
+            <div class="pillar-bar-fill" style="width:56.0%;background:#1a6b6b;"></div>
+          </div>
+          <span class="pillar-bar-val">2.8</span>
+        </div>
+        <div class="pillar-bar-row">
+          <span class="pillar-bar-label">V — Fin. Market Diagnostics</span>
+          <div class="pillar-bar-track">
+            <div class="pillar-bar-fill" style="width:76.0%;background:#1a4a7a;"></div>
+          </div>
+          <span class="pillar-bar-val">3.8</span>
+        </div>
+  </div>
+</div>
+
+<div class="context-strip">
+  <span class="icon">⚠️</span>
+  <p><strong>Fiscal Fragility &amp; Political Tension:</strong> Kenya is grappling with a high debt burden (67.8% of GDP, elevated risk of debt distress), persistent fiscal deficits, and social unrest following tax reform attempts in 2024. Revenue lags expenditure despite a tax/GDP ratio (14.1%) that is close to the 15% minimum.</p>
+</div>
+
+<div class="main">
+
+  
+  <div class="caveat-banner">
+    <span class="caveat-icon">ℹ️</span>
+    <p><strong>Data Completeness:</strong> 22 of 25 indicators scored.
+    Pillar and overall scores are unweighted averages of <em>available</em> indicators only —
+    missing values are excluded rather than counted as zero. Treat cross-country comparisons with care.</p>
+  </div>
+
+  <div class="legend">
+    <span style="font-size:11.5px;font-weight:600;color:var(--ink);margin-right:6px;">Score:</span>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score1)"></div>1 – Critical</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score2)"></div>2 – Weak</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score3)"></div>3 – Moderate</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score4)"></div>4 – Good</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score5)"></div>5 – Strong</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score-na)"></div>N/A – No data</div>
+    <span style="font-size:11px;color:var(--muted);margin-left:12px;">💬 = Conversation starter for donor / government dialogue</span>
+  </div>
+
+  <div class="findings-grid">
+    
+    <div class="finding-card">
+      <div class="finding-icon">🟡</div>
+      <h4>Debt Distress Risk</h4>
+      <p>Public debt at 71.6% of GDP with elevated risk of distress. Debt service consumes 24.3% of government revenue — crowding out development spending.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟢</div>
+      <h4>Better Tax Base</h4>
+      <p>Tax/GDP at 14.1% — close to the 15% minimum and notably stronger than regional peers. Broadening base and improving compliance remain priorities.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟡</div>
+      <h4>Missing B-Ready Data</h4>
+      <p>Kenya is not yet covered by the World Bank B-Ready assessment — limiting visibility on regulatory framework, public services, and operational efficiency for investors.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟠</div>
+      <h4>Sub-Investment Grade</h4>
+      <p>S&amp;P B rating after downgrades signals high credit risk and elevated borrowing costs. Market access strained after 2024 Eurobond refinancing.</p>
+    </div>
+  </div>
+
+  
+  <div class="section-header">
+    <div class="section-dot dot-flows"></div>
+    <h2>Pillar I — Flows</h2>
+    
+    <div class="score-chip" style="background:var(--green);">Avg 3.0 / 5</div>
+  </div>
+  <div class="indicators-grid">
+    
+    <div class="card border3">
+      <div class="card-sub">Domestic · Tax</div>
+      <div class="card-title">Tax Revenue as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">14.1</span>
+          <span class="unit">% of GDP</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% (IMF minimum for essential state functions); ≥20% = strong. World avg ~16.8%.</div>
+      <div class="card-conversation">What is the roadmap to reach and sustain ≥15% tax-to-GDP, and how can donors support revenue administration reform?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/GC.TAX.TOTL.GD.ZS" target="_blank">World Bank WDI — Tax Revenue</a></div>
+    </div>
+    <div class="card border2">
+      <div class="card-sub">Domestic · Integrity</div>
+      <div class="card-title">Illicit Financial Flows — Basel AML Index</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">6.60</span>
+          <span class="unit">Index 0–10</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;3.5 acceptable; &lt;3.0 low risk; &gt;7.0 critical.</div>
+      <div class="card-conversation">What AML/CFT reforms are prioritised to reduce IFF risk, and how does the FATF review schedule intersect with these efforts?</div>
+      <div class="card-source">📊 <a href="https://index.baselgovernance.org/" target="_blank">Basel Institute on Governance</a></div>
+    </div>
+    <div class="card border5">
+      <div class="card-sub">External · ODA</div>
+      <div class="card-title">Net ODA Received as % of GNI</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">2.50</span>
+          <span class="unit">% of GNI</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% well-coordinated; 5–10% moderate; &gt;20% high dependency.</div>
+      <div class="card-conversation">How are donors aligning ODA with the national development plan and post-transition financing strategy?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/DT.ODA.ODAT.GN.ZS" target="_blank">World Bank WDI — ODA</a></div>
+    </div>
+    <div class="card border1">
+      <div class="card-sub">External · FDI</div>
+      <div class="card-title">FDI Net Inflows as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">0.40</span>
+          <span class="unit">% of GDP</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥2% peer LMIC benchmark; ≥5% = strong diversified inflows.</div>
+      <div class="card-conversation">What investment climate reforms are prioritised to attract greenfield FDI in diversified sectors?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/BX.KLT.DINV.WD.GD.ZS" target="_blank">World Bank WDI — FDI</a></div>
+    </div>
+    <div class="card border5">
+      <div class="card-sub">External · Remittances</div>
+      <div class="card-title">Remittances as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">4.20</span>
+          <span class="unit">% of GDP</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> 3–10% healthy; &gt;15% dependency risk; &lt;1% very low.</div>
+      <div class="card-conversation">What mechanisms channel remittances into productive investment (bonds, fintech, diaspora funds) rather than pure consumption?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/BX.TRF.PWKR.DT.GD.ZS" target="_blank">World Bank WDI — Remittances</a></div>
+    </div>
+    <div class="card border2">
+      <div class="card-sub">Debt</div>
+      <div class="card-title">Public Debt as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">71.6</span>
+          <span class="unit">% of GDP</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;55% (IMF LIC DSF threshold); &lt;60% (EU Maastricht); &gt;80% high risk.</div>
+      <div class="card-conversation">With rising debt service burden, what is the strategy for maintaining market access and fiscal space?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/external/datamapper/GGXWDG_NGDP@WEO" target="_blank">IMF WEO — Public Debt</a></div>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-dot dot-exp"></div>
+    <h2>Pillar II — Expenditure</h2>
+    
+    <div class="score-chip" style="background:var(--orange);">Avg 2.7 / 5</div>
+  </div>
+  <div class="indicators-grid">
+    
+    <div class="card border4">
+      <div class="card-sub">Sectoral · Education</div>
+      <div class="card-title">Public Education Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">4</span>
+          <span class="unit">% of GDP</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥4% (UNESCO/Incheon Declaration); ≥6% = strong.</div>
+      <div class="card-conversation">What is the concrete roadmap to reach 4% education spending, and how can donors bridge the gap?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS" target="_blank">World Bank WDI — Education</a></div>
+    </div>
+    <div class="card border2">
+      <div class="card-sub">Sectoral · Health</div>
+      <div class="card-title">Public Health Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">1.95</span>
+          <span class="unit">% of GDP</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥5% (WHO); ≥15% of budget (Abuja Declaration 2001).</div>
+      <div class="card-conversation">What is the plan for public financing expansion and health insurance scale-up to reduce out-of-pocket burden?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/SH.XPD.GHED.GD.ZS" target="_blank">World Bank WDI — Health</a></div>
+    </div>
+    <div class="card border2">
+      <div class="card-sub">Fiscal Space</div>
+      <div class="card-title">Debt Service as % of Government Revenue</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">24.3</span>
+          <span class="unit">% of revenue</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% interest = safe; 10–15% moderate; &gt;25% = distress.</div>
+      <div class="card-conversation">How is debt service being managed relative to revenue, and what liability management operations are underway?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/GC.XPN.INTP.RV.ZS" target="_blank">World Bank WDI — Debt Service</a></div>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-dot dot-eff"></div>
+    <h2>Pillar III — Spending Effectiveness</h2>
+    
+    <div class="score-chip" style="background:var(--purple);">Avg 4.0 / 5</div>
+  </div>
+  <div class="indicators-grid">
+    
+    <div class="card border4">
+      <div class="card-sub">PFM Quality</div>
+      <div class="card-title">PEFA Score — Overall PFM Quality</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">2.66</span>
+          <span class="unit">numeric avg, 0–4 scale</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> Numeric avg ≥3.5 (B+ avg); ≥2.5 (B avg) adequate; &lt;1.0 = failing.</div>
+      <div class="card-conversation">What are the priority PFM reforms and how are donors coordinating capacity support?</div>
+      <div class="card-source">📊 <a href="https://www.pefa.org/assessments" target="_blank">PEFA Secretariat</a></div>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-dot dot-env"></div>
+    <h2>Pillar IV — Enabling Environment</h2>
+    <span class="data-note">(4 of 7 indicators scored)</span>
+    <div class="score-chip" style="background:var(--teal);">Avg 2.8 / 5</div>
+  </div>
+  <div class="indicators-grid">
+    
+    <div class="card border3">
+      <div class="card-sub">Policy · INFF</div>
+      <div class="card-title">National FfD / INFF Framework</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">3</span>
+          <span class="unit">Qualitative 1–5</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> Operational INFF integrated with budget (Addis Ababa Agenda).</div>
+      <div class="card-conversation">How is the INFF process being operationalised, and what role can UNDP/DESA and bilateral donors play in the next phase?</div>
+      <div class="card-source">📊 <a href="https://inff.org" target="_blank">UN INFF Knowledge Platform</a></div>
+    </div>
+    <div class="card border3">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Rule of Law Index (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">-0.05</span>
+          <span class="unit">scale -2.5 to +2.5</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 median; ≥0.5 strong; &lt;-0.7 very weak institutions.</div>
+      <div class="card-conversation">Judicial reform is a precondition for investment climate improvement. What specific institutional changes are planned?</div>
+      <div class="card-source">📊 <a href="https://info.worldbank.org/governance/wgi/" target="_blank">World Bank WGI — Rule of Law</a></div>
+    </div>
+    <div class="card border3">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Regulatory Quality (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">-0.02</span>
+          <span class="unit">scale -2.5 to +2.5</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 median; ≥0.5 strong; &lt;-0.7 very poor.</div>
+      <div class="card-conversation">What regulatory reforms are prioritised to improve the private sector enabling environment?</div>
+      <div class="card-source">📊 <a href="https://info.worldbank.org/governance/wgi/" target="_blank">World Bank WGI — Regulatory Quality</a></div>
+    </div>
+    <div class="card border2">
+      <div class="card-sub">Governance · Integrity</div>
+      <div class="card-title">Corruption Perceptions Index (CPI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">30</span>
+          <span class="unit">score 0–100</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥50 acceptable; ≥65 strong; &lt;30 severe corruption risk.</div>
+      <div class="card-conversation">What concrete anti-corruption institutional changes are donors conditioning support on?</div>
+      <div class="card-source">📊 <a href="https://www.transparency.org/en/cpi" target="_blank">Transparency International CPI</a></div>
+    </div>
+    <div class="card border-na">
+      <div class="card-sub">Investment Climate</div>
+      <div class="card-title">B-Ready Pillar 1 — Regulatory Framework</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">N/A</span>
+          <span class="unit"></span>
+        </div>
+        <div class="card-score-badge s-na">—</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70 enabling; ≥85 best practice. Replaces Doing Business (2024).</div>
+      <div class="card-conversation">How is the regulatory framework being modernised to attract diversified investment?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/programs/business-enabling-environment" target="_blank">World Bank B-Ready</a></div>
+    </div>
+    <div class="card border-na">
+      <div class="card-sub">Investment Climate</div>
+      <div class="card-title">B-Ready Pillar 2 — Public Services</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">N/A</span>
+          <span class="unit"></span>
+        </div>
+        <div class="card-score-badge s-na">—</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70 adequate; ≥85 strong digital and physical infrastructure.</div>
+      <div class="card-conversation">Are public service gaps being addressed through coherent infrastructure and digital government investments?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/programs/business-enabling-environment" target="_blank">World Bank B-Ready</a></div>
+    </div>
+    <div class="card border-na">
+      <div class="card-sub">Investment Climate</div>
+      <div class="card-title">B-Ready Pillar 3 — Operational Efficiency</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">N/A</span>
+          <span class="unit"></span>
+        </div>
+        <div class="card-score-badge s-na">—</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70 efficient; ≥85 best practice on time/cost/procedure.</div>
+      <div class="card-conversation">How are transaction costs and procedural burdens for firms being reduced?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/programs/business-enabling-environment" target="_blank">World Bank B-Ready</a></div>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-dot dot-fin"></div>
+    <h2>Pillar V — Fin. Market Diagnostics</h2>
+    
+    <div class="score-chip" style="background:var(--blue);">Avg 3.8 / 5</div>
+  </div>
+  <div class="indicators-grid">
+    
+    <div class="card border2">
+      <div class="card-sub">Risk Premium</div>
+      <div class="card-title">Sovereign Credit Rating (S&amp;P eq.)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">B</span>
+          <span class="unit">rating</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> BBB– or above = investment grade; BB– = sub-IG with market access.</div>
+      <div class="card-conversation">What is the medium-term strategy to improve the sovereign rating trajectory and borrowing costs?</div>
+      <div class="card-source">📊 <a href="https://www.spglobal.com/ratings/" target="_blank">S&amp;P Global Ratings</a></div>
+    </div>
+    <div class="card border5">
+      <div class="card-sub">Debt Structure</div>
+      <div class="card-title">Average Maturity of External Private Debt</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">35</span>
+          <span class="unit">years</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥10yr adequate for infrastructure; &lt;5yr = rollover risk.</div>
+      <div class="card-conversation">How is the debt maturity profile being managed to reduce rollover risk?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/DT.DOD.DECT.GN.ZS" target="_blank">World Bank IDS</a></div>
+    </div>
+    <div class="card border5">
+      <div class="card-sub">Private Finance</div>
+      <div class="card-title">Domestic Private Investment as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">31.8</span>
+          <span class="unit">% of GDP</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% IMF norm; ≥20% strong financial depth.</div>
+      <div class="card-conversation">What reforms are unlocking deeper private sector investment in productive sectors?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/FS.AST.PRVT.GD.ZS" target="_blank">World Bank WDI — Credit to Private Sector</a></div>
+    </div>
+    <div class="card border5">
+      <div class="card-sub">Credit Access</div>
+      <div class="card-title">% Firms Fully Credit Constrained</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">9.90</span>
+          <span class="unit">% of firms</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;10% well-functioning; &gt;30% severe constraint.</div>
+      <div class="card-conversation">What is being done to expand access to finance for MSMEs and underserved firms?</div>
+      <div class="card-source">📊 <a href="https://www.enterprisesurveys.org/en/data/exploretopics/finance" target="_blank">WB Enterprise Surveys</a></div>
+    </div>
+    <div class="card border2">
+      <div class="card-sub">Credit Access</div>
+      <div class="card-title">% Firms Citing Unfavourable Loan Conditions</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">37</span>
+          <span class="unit">% of firms</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;15% reasonable; &gt;40% systemic lending constraint.</div>
+      <div class="card-conversation">How are interest rates, collateral requirements, and loan procedures being addressed to improve credit conditions?</div>
+      <div class="card-source">📊 <a href="https://www.enterprisesurveys.org/en/data/exploretopics/finance" target="_blank">WB Enterprise Surveys</a></div>
+    </div>
+    <div class="card border2">
+      <div class="card-sub">Banking Health</div>
+      <div class="card-title">Non-Performing Loans (NPL) Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">12.3</span>
+          <span class="unit">% of loans</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% healthy (Basel III); &gt;10% downgrade trigger; &gt;20% crisis.</div>
+      <div class="card-conversation">What is the bank resolution, recognition, and recapitalisation plan — and how is supervisory oversight being strengthened?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/FB.AST.NPER.ZS" target="_blank">World Bank WDI — NPL Ratio</a></div>
+    </div>
+    <div class="card border5">
+      <div class="card-sub">Banking Health</div>
+      <div class="card-title">Customer Deposits to Total Loans Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">125.3</span>
+          <span class="unit">ratio %</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥80% stable deposit-funded; &lt;50% high wholesale funding risk.</div>
+      <div class="card-conversation">How stable is the deposit base, and are there emerging funding concentration risks?</div>
+      <div class="card-source">📊 <a href="https://data.imf.org/en/datasets/IMF.STA:FSIC" target="_blank">IMF Financial Soundness Indicators</a></div>
+    </div>
+    <div class="card border4">
+      <div class="card-sub">Banking Health</div>
+      <div class="card-title">Bank Capital to Assets Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">10.4</span>
+          <span class="unit">% of assets</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥8% Basel III minimum; ≥10% adequate; ≥15% strong.</div>
+      <div class="card-conversation">Is banking sector capitalisation sufficient to intermediate finance for development?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/FB.BNK.CAPA.ZS" target="_blank">World Bank WDI — Bank Capital</a></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p><strong>Sources &amp; Methodology:</strong> All indicators drawn from publicly available international databases
+  (World Bank WDI, IMF WEO/FSI, OECD DAC, WHO GHE, UNESCO UIS, Transparency International, Basel Institute on Governance,
+  PEFA Secretariat, WB Enterprise Surveys, WB B-Ready, UN INFF Knowledge Platform). Scores (1–5) reflect assessment
+  against international benchmarks as of FY2023–24 reference period. Pillar and overall scores are unweighted averages
+  of available indicators only.</p>
+  <p style="margin-top:8px;"><strong>Intended Use:</strong> This scorecard is a structured conversation starter for
+  donor–government dialogue on FfD priorities. It is not an official government document. Data should be verified
+  against primary sources before use in formal assessments.</p>
+  <p style="margin-top:8px;"><strong>Overall FfD Score:</strong> 3.2 / 5 — Moderate. Based on 22 of 25
+  indicators scored. The Financial Institutions Development Index (IMF FDI) was excluded from scoring because the
+  underlying data has not been updated since 2020.</p>
+</div>
+
+</body>
+</html>
