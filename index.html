@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<!--
+  ════════════════════════════════════════════════════════════════
+  HOW TO EDIT THIS PAGE (no coding needed — just text swaps)
+
+  To mark a country LIVE once you've uploaded its scorecard:
+  1. Scroll down to the COUNTRY GRID section below
+  2. Find that country's block (e.g. "GUATEMALA")
+  3. Delete the greyed-out "is-pilot" card
+  4. Find the matching commented-out "is-live" version just below it
+     and remove the comment markers around it so it becomes real code
+  5. Update the one-line description text to something true
+  6. Update the live / coming-soon counter further down
+
+  To edit any text (hero title, notice strip, about section):
+  just find the words in plain English below and overwrite them.
+  Anything inside angle-bracket tags is structure — leave that alone.
+  Use GitHub's pencil/Edit icon on this file to make changes,
+  then commit.
+  ════════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FfD Country Scorecards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1923;
+    --paper: #f5f0e8;
+    --paper2: #ede8df;
+    --gold: #c9a227;
+    --green: #2a6b3c;
+    --blue: #1a4a7a;
+    --teal: #1a6b6b;
+    --orange: #b85c1a;
+    --purple: #5a2a7a;
+    --muted: #6b6555;
+    --border: #cdc5b2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── HERO ─────────────────────────────── */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 64px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 380px; height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,162,39,0.14) 0%, transparent 70%);
+  }
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 5.5vw, 50px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    max-width: 700px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p.lede {
+    font-size: 15px;
+    color: rgba(245,240,232,0.75);
+    max-width: 600px;
+    font-weight: 300;
+  }
+
+  /* ── MOCKUP NOTICE STRIP ──────────────────── */
+  .notice-strip {
+    background: var(--gold);
+    padding: 16px 48px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .notice-strip .icon { font-size: 17px; margin-top: 1px; flex-shrink: 0; }
+  .notice-strip p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .notice-strip strong { font-weight: 700; }
+  .notice-strip a { color: var(--ink); text-decoration: underline; }
+
+  /* ── MAIN ─────────────────────────────── */
+  .main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    max-width: 620px;
+  }
+
+  /* ── STATUS COUNT ─────────────────────────── */
+  .status-row {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--border);
+  }
+  .status-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12.5px; color: var(--muted);
+  }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.live { background: var(--green); }
+  .status-dot.pilot { background: var(--border); border: 1.5px solid var(--muted); }
+
+  /* ── COUNTRY GRID ─────────────────────────── */
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .country-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .country-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .country-card.is-live::before { background: var(--green); }
+  .country-card.is-pilot::before { background: var(--border); }
+
+  .country-card.is-live:hover {
+    box-shadow: 0 8px 24px rgba(15,25,35,0.1);
+    transform: translateY(-2px);
+  }
+  .country-card.is-pilot {
+    cursor: default;
+  }
+  .country-card.is-pilot .country-name { color: var(--muted); }
+
+  .card-top-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .country-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .status-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .status-tag.live { background: var(--green); color: white; }
+  .status-tag.pilot { background: var(--paper2); color: var(--muted); border: 1px solid var(--border); }
+
+  .country-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .card-link-row {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--blue);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .country-card.is-pilot .card-link-row { color: var(--muted); }
+
+  /* ── ABOUT THIS PROJECT ───────────────────── */
+  .about-box {
+    background: var(--ink);
+    color: rgba(245,240,232,0.85);
+    border-radius: 12px;
+    padding: 28px 30px;
+    margin-bottom: 12px;
+  }
+  .about-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .about-box p {
+    font-size: 13px;
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .about-box p:last-child { margin-bottom: 0; }
+  .about-links {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(245,240,232,0.15);
+  }
+  .about-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+  }
+  .about-links a:hover { text-decoration: underline; }
+
+  /* ── FOOTER ───────────────────────────────── */
+  .footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.5);
+    padding: 24px 48px;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .footer strong { color: rgba(245,240,232,0.8); }
+
+  @media (max-width: 640px) {
+    .hero, .main, .notice-strip, .footer { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">Financing for Development</div>
+  <h1>FfD Country <span>Scorecards</span></h1>
+  <p class="lede">A diagnostic tool scoring countries across 25 indicators in 5 pillars against fixed international benchmarks — built as a conversation starter for donor–government dialogue.</p>
+</div>
+
+<div class="notice-strip">
+  <span class="icon">🧪</span>
+  <p><strong>This is a test case / mockup, not a finished product.</strong> It was built and iterated in Claude to explore whether a structured scorecard tool is useful for donor–government dialogue. Read the <a href="README.md">README</a> and <a href="METHODOLOGY.md">METHODOLOGY</a> to understand how scoring works before treating any figure as authoritative — always verify data and numbers against primary sources before use.</p>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Country Index</div>
+  <div class="section-title">Country Scorecards</div>
+  <p class="section-sub">Scorecards will be published here as they're completed.</p>
+
+  <!-- STATUS COUNT — update these two numbers as you add countries -->
+  <div class="status-row">
+    <div class="status-item"><div class="status-dot live"></div>3 live</div>
+    <div class="status-item"><div class="status-dot pilot"></div>2 coming soon</div>
+  </div>
+
+  <div class="country-grid">
+
+    <a href="bangladesh/" class="country-card is-live">
+      <div class="card-top-row">
+        <span class="country-name">Bangladesh</span>
+        <span class="status-tag live">Live</span>
+      </div>
+      <p class="country-desc">Updated with IMF 2025 Article IV data. The most developed scorecard in the pilot set.</p>
+      <div class="card-link-row">View scorecard →</div>
+    </a>
+
+    <!-- ══════════════════════════════════════════════════════════
+         GUATEMALA — once you've uploaded guatemala/index.html,
+         delete this whole block and paste in the LIVE version below.
+         See the "HOW TO MARK A COUNTRY LIVE" instructions at the
+         top of this file (in the HTML comment near the top).
+         ══════════════════════════════════════════════════════════ -->
+    <div class="country-card is-pilot">
+      <div class="card-top-row">
+        <span class="country-name">Guatemala</span>
+        <span class="status-tag pilot">Coming soon</span>
+      </div>
+      <p class="country-desc">Scorecard coming soon.</p>
+      <div class="card-link-row">Not yet published</div>
+    </div>
+    <!-- ⬆ DELETE the block above and uncomment/paste this when ready:
+
+    <a href="guatemala/" class="country-card is-live">
+      <div class="card-top-row">
+        <span class="country-name">Guatemala</span>
+        <span class="status-tag live">Live</span>
+      </div>
+      <p class="country-desc">Write a one-line description of this scorecard here.</p>
+      <div class="card-link-row">View scorecard →</div>
+    </a>
+
+    -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+
+    <!-- SOMALIA — same pattern as Guatemala above -->
+    <div class="country-card is-pilot">
+      <div class="card-top-row">
+        <span class="country-name">Somalia</span>
+        <span class="status-tag pilot">Coming soon</span>
+      </div>
+      <p class="country-desc">Scorecard coming soon.</p>
+      <div class="card-link-row">Not yet published</div>
+    </div>
+    <!-- ⬆ DELETE the block above and uncomment/paste this when ready:
+
+    <a href="somalia/" class="country-card is-live">
+      <div class="card-top-row">
+        <span class="country-name">Somalia</span>
+        <span class="status-tag live">Live</span>
+      </div>
+      <p class="country-desc">Write a one-line description of this scorecard here.</p>
+      <div class="card-link-row">View scorecard →</div>
+    </a>
+
+    -->
+
+    <a href="kenya/" class="country-card is-live">
+      <div class="card-top-row">
+        <span class="country-name">Kenya</span>
+        <span class="status-tag live">Live</span>
+      </div>
+      <p class="country-desc">Country scorecard.</p>
+      <div class="card-link-row">View scorecard →</div>
+    </a>
+    <a href="colombia/" class="country-card is-live">
+      <div class="card-top-row">
+        <span class="country-name">Colombia</span>
+        <span class="status-tag live">Live</span>
+      </div>
+      <p class="country-desc">Country scorecard.</p>
+      <div class="card-link-row">View scorecard →</div>
+    </a>
+  </div>
+
+  <div class="about-box">
+    <h3>About this project</h3>
+    <p>The FfD Country Scorecard is a structured diagnostic tool scoring countries across 25 indicators in five pillars — Flows, Expenditure, Spending Effectiveness, Enabling Environment, and Financial Market Diagnostics — on a 1–5 scale against fixed international benchmarks.</p>
+    <p>It is designed as a conversation starter for donor–government dialogue, not an official assessment or a cross-country ranking tool. The project is currently a prototype: it is not institutionally owned or co-owned with any internal unit.</p>
+    <p><strong>Author:</strong> Anzee Altaf</p>
+    <div class="about-links">
+      <a href="README.md">README →</a>
+      <a href="METHODOLOGY.md">METHODOLOGY →</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p><strong>Status:</strong> Prototype / test case. Built and iterated using Claude. Not an official assessment tool.</p>
+  <p style="margin-top:6px;">© 2026 Anzee Altaf · Financing for Development Country Scorecards</p>
+</div>
+
+</body>
+</html>
