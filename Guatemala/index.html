@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guatemala FfD Scorecard 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1923;
+    --paper: #f5f0e8;
+    --paper2: #ede8df;
+    --accent: #c8473a;
+    --gold: #c9a227;
+    --green: #2a6b3c;
+    --blue: #1a4a7a;
+    --teal: #1a6b6b;
+    --orange: #b85c1a;
+    --purple: #5a2a7a;
+    --muted: #6b6555;
+    --border: #cdc5b2;
+
+    --score1: #c0392b;
+    --score2: #e67e22;
+    --score3: #f1c40f;
+    --score4: #27ae60;
+    --score5: #1a7a4a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── COVER ─────────────────────────────── */
+  .cover {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 56px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(73,151,208,0.20) 0%, transparent 70%);
+  }
+  .cover-flag {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .flag-gt {
+    width: 48px; height: 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .flag-gt span { flex: 1; height: 100%; }
+  .flag-gt .blue { background: #4997d0; }
+  .flag-gt .white { background: #fff; position: relative; }
+  .flag-gt .white::after {
+    content: '';
+    position: absolute; top: 50%; left: 50%;
+    width: 8px; height: 8px; transform: translate(-50%,-50%);
+    border-radius: 50%;
+    border: 1.5px solid #5a7d3a;
+  }
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .cover-title span { color: #4997d0; }
+  .cover-sub {
+    font-size: 15px;
+    color: rgba(245,240,232,0.7);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .cover-meta-item {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .cover-meta-item .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(245,240,232,0.45);
+    text-transform: uppercase;
+  }
+  .cover-meta-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--paper);
+  }
+
+  /* ── OVERALL SCORE BAR ───────────────────── */
+  .score-banner {
+    background: var(--ink);
+    padding: 0 48px 40px;
+    display: flex; align-items: flex-end; gap: 40px; flex-wrap: wrap;
+  }
+  .overall-score-ring {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .overall-score-ring svg { display: block; }
+  .ring-inner {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-inner .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1;
+  }
+  .ring-inner .denom {
+    font-size: 13px;
+    color: rgba(245,240,232,0.45);
+  }
+  .ring-inner .rating {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .pillar-scores {
+    flex: 1; display: flex; flex-direction: column; gap: 10px;
+    min-width: 280px;
+  }
+  .pillar-bar-row {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .pillar-bar-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(245,240,232,0.7);
+    width: 200px;
+    flex-shrink: 0;
+  }
+  .pillar-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(245,240,232,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .pillar-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .pillar-bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--paper);
+    width: 36px;
+    text-align: right;
+  }
+
+  /* ── CONTEXT STRIP ───────────────────────── */
+  .context-strip {
+    background: var(--gold);
+    padding: 14px 48px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .context-strip .icon { font-size: 18px; }
+  .context-strip p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .context-strip strong { font-weight: 700; }
+
+  /* ── MAIN CONTENT ────────────────────────── */
+  .main { padding: 40px 48px; max-width: 1200px; margin: 0 auto; }
+
+  /* ── SECTION HEADER ──────────────────────── */
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px; margin-top: 40px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .section-header .score-chip {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 14px;
+    border-radius: 20px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* ── INDICATOR CARDS ─────────────────────── */
+  .indicators-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(15,25,35,0.1);
+    transform: translateY(-2px);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+
+  .card-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+
+  .card-values {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 12px;
+  }
+  .card-current {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .card-current .label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .card-current .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .card-current .unit {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .card-score-badge {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+  }
+  .card-score-badge.na {
+    background: #b8b2a0;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .card-benchmark {
+    background: var(--paper);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .card-benchmark strong { color: var(--ink); font-weight: 600; }
+
+  .card-trend {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .trend-arrow { font-size: 14px; }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--score1); }
+  .trend-flat { color: var(--orange); }
+
+  .card-conversation {
+    background: #fffbf0;
+    border: 1px dashed var(--gold);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    color: #7a5c00;
+    line-height: 1.5;
+  }
+  .card-conversation::before {
+    content: '💬 ';
+  }
+
+  .card-source {
+    margin-top: 10px;
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .card-source a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--blue);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+  .card-source a:hover { text-decoration: underline; }
+
+  .imf-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    background: var(--blue);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 10px;
+    text-transform: uppercase;
+  }
+
+  /* Data gap card */
+  .card.gap { background: #fbfaf6; border-style: dashed; }
+  .card.gap .card-title { color: var(--muted); }
+  .gap-note {
+    background: #f3efe4;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  .gap-tag {
+    display:inline-block;
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px;
+    text-transform:uppercase; color:#8a7f5f;
+    background:#ece6d6; border-radius:10px; padding:2px 8px; margin-bottom:8px;
+  }
+
+  /* Score colours */
+  .s1 { background: var(--score1); }
+  .s2 { background: var(--score2); }
+  .s3 { background: var(--score3); color: var(--ink) !important; }
+  .s4 { background: var(--score4); }
+  .s5 { background: var(--score5); }
+
+  .border1::before { background: var(--score1); }
+  .border2::before { background: var(--score2); }
+  .border3::before { background: var(--score3); }
+  .border4::before { background: var(--score4); }
+  .border5::before { background: var(--score5); }
+  .border0::before { background: #b8b2a0; }
+
+  /* Pillar section colours */
+  .dot-flows { background: var(--green); }
+  .dot-exp   { background: var(--orange); }
+  .dot-eff   { background: var(--purple); }
+  .dot-env   { background: var(--teal); }
+  .dot-fin   { background: var(--blue); }
+
+  /* ── KEY FINDINGS ─────────────────────────── */
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .finding-card {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .finding-card .finding-icon { font-size: 24px; margin-bottom: 10px; }
+  .finding-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--gold);
+  }
+  .finding-card p {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.8);
+  }
+
+  /* ── SCORE LEGEND ─────────────────────────── */
+  .legend {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11.5px; color: var(--muted);
+  }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+
+  /* ── CAVEAT BANNER ────────────────────────── */
+  .caveat-banner {
+    background: #fbf6ea;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #5c5440;
+    margin-bottom: 32px;
+  }
+  .caveat-banner strong { color: var(--ink); }
+
+  /* ── FOOTER ───────────────────────────────── */
+  .footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.5);
+    padding: 24px 48px;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 48px;
+  }
+  .footer strong { color: rgba(245,240,232,0.8); }
+
+  @media (max-width: 640px) {
+    .cover, .main, .score-banner { padding-left: 24px; padding-right: 24px; }
+    .pillar-bar-label { width: 130px; font-size: 10px; }
+    .context-strip { padding-left: 24px; padding-right: 24px; }
+    .indicators-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-flag">
+    <div class="flag-gt"><span class="blue"></span><span class="white"></span><span class="blue"></span></div>
+    <span class="cover-label">Financing for Development</span>
+  </div>
+  <div class="cover-title">Guatemala<br><span>FfD Scorecard</span></div>
+  <div class="cover-sub">Country-Level Assessment · Conversation Starter for Donors &amp; Government</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span class="label">Reference Year</span>
+      <span class="value">2024 (CY)</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">GDP (Nominal)</span>
+      <span class="value">~$113bn USD</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">Population</span>
+      <span class="value">17.9 million</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">Income Status</span>
+      <span class="value">Upper-middle income</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">IMF Engagement</span>
+      <span class="value">Article IV 2025 (surveillance)</span>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE BANNER -->
+<div class="score-banner">
+  <div class="overall-score-ring">
+    <svg width="130" height="130" viewBox="0 0 130 130">
+      <circle cx="65" cy="65" r="56" fill="none" stroke="rgba(245,240,232,0.1)" stroke-width="10"></circle>
+      <circle cx="65" cy="65" r="56" fill="none" stroke="#c9a227" stroke-width="10" stroke-dasharray="351.9" stroke-dashoffset="166.5" stroke-linecap="round" transform="rotate(-90 65 65)"></circle>
+    </svg>
+    <div class="ring-inner">
+      <div class="num">2.6</div>
+      <div class="denom">out of 5</div>
+      <div class="rating">Moderate</div>
+    </div>
+  </div>
+
+  <div class="pillar-scores">
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">I. Flows</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:67%;background:#2a6b3c;"></div></div>
+      <span class="pillar-bar-val">3.3</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">II. Expenditure</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:47%;background:#b85c1a;"></div></div>
+      <span class="pillar-bar-val">2.3</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">III. Spending Effectiveness</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:40%;background:#5a2a7a;"></div></div>
+      <span class="pillar-bar-val">2.0</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">IV. Enabling Environment</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:30%;background:#1a6b6b;"></div></div>
+      <span class="pillar-bar-val">1.5</span>
+    </div>
+    <div class="pillar-bar-row">
+      <span class="pillar-bar-label">V. Fin. Market Diagnostics</span>
+      <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width:80%;background:#1a4a7a;"></div></div>
+      <span class="pillar-bar-val">4.0</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT STRIP -->
+<div class="context-strip">
+  <span class="icon">⚖️</span>
+  <p><strong>A stable but low-investment equilibrium:</strong> Guatemala pairs genuine macro stability — low inflation, public debt near 26% of GDP, a current-account surplus and reserves above 7 months of imports — with the hemisphere's lowest tax take (~12% of GDP), under-funded social services, weak rule of law, and heavy reliance on remittances (~19% of GDP) now exposed to shifts in US trade and migration policy.</p>
+</div>
+
+<div class="main">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span style="font-size:11.5px;font-weight:600;color:var(--ink);margin-right:6px;">Score:</span>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score1)"></div>1 – Critical</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score2)"></div>2 – Weak</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score3)"></div>3 – Moderate</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score4)"></div>4 – Good</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score5)"></div>5 – Excellent</div>
+    <span style="font-size:11px;color:var(--muted);margin-left:12px;">💬 = Conversation starter &nbsp;·&nbsp; <span class="imf-badge">IMF AIV 2025</span> = sourced from IMF Article IV</span>
+  </div>
+
+  <!-- KEY FINDINGS -->
+  <div class="findings-grid">
+    <div class="finding-card">
+      <div class="finding-icon">🟠</div>
+      <h4>The Revenue Floor</h4>
+      <p>At ~12% of GDP, tax revenue is among the lowest of any market-access economy in the Western Hemisphere — the binding constraint on a "small-footprint state" with weak social outcomes.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟡</div>
+      <h4>Remittance Dependency</h4>
+      <p>Remittances (~19% of GDP) dwarf FDI (~1.6%) and ODA combined. They sustain consumption but mask weak competitiveness — and are exposed to tighter US migration policy.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🔴</div>
+      <h4>Social &amp; Governance Deficit</h4>
+      <p>Central-government health (~1.4%) and education (~2.9%) spending are low; secondary enrolment is below 50%. CPI sits at 25/100 and rule of law remains weak amid an executive–judiciary standoff.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟢</div>
+      <h4>Macro-Financial Strength</h4>
+      <p>Public debt ~26% of GDP, banking NPLs ~2.5%, a BB+ rating one notch below investment grade, and ample reserves give Guatemala space its peers lack — if it chooses to use it.</p>
+    </div>
+  </div>
+
+  <!-- PILLAR I: FLOWS -->
+  <div class="section-header">
+    <div class="section-dot dot-flows"></div>
+    <h2>Pillar I — Flows</h2>
+    <div class="score-chip" style="background:var(--green);">Avg 3.3 / 5</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border2">
+      <div class="card-sub">Domestic · Tax</div>
+      <div class="card-title">Tax Revenue as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">11.8%</span>
+          <span class="unit">of GDP (2024)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% (IMF minimum); ≥20% strong. Tax rose from 10% (2020) to 11.8% (2024); authorities target 12.5%.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Gradually rising via SAT administration measures — but well below need</div>
+      <div class="card-conversation">With a 2023 electoral pledge not to raise rates, can e-invoicing, audits and anti-smuggling realistically reach the 12.5% target — and how is medium-term tax reform being sequenced?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Domestic · IFF Risk</div>
+      <div class="card-title">Illicit Financial Flows — Basel AML Index</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">5.45</span>
+          <span class="unit">/ 10 risk (2024)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;3.5 acceptable; &lt;3.0 low risk; &gt;7.0 critical. Not on FATF/GAFILAT grey list, but ML risk elevated.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> Risk score rising continuously since 2019</div>
+      <div class="card-conversation">With the GAFILAT mutual evaluation due in 2027 and the AML/CFT and Beneficial Ownership laws still pending in Congress, what is a realistic legislative timeline — and how is rising ML risk managed in the interim?</div>
+      <div class="card-source">📊 <a href="https://baselgovernance.org/basel-aml-index" target="_blank">Basel AML Index 2024</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">External · ODA</div>
+      <div class="card-title">Net ODA Received as % of GNI</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">0.44%</span>
+          <span class="unit">of GNI (2023)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% GNI = low aid dependency. As an upper-middle-income economy, Guatemala's aid reliance is minimal.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Low and stable; IADB-financed strategic investments are a key channel</div>
+      <div class="card-conversation">With a small concessional envelope, how can ODA and technical cooperation be best targeted — at PFM, statistics, anti-corruption and project-appraisal capacity?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/DT.ODA.ODAT.GN.ZS?locations=GT" target="_blank">World Bank WDI, indicator DT.ODA.ODAT.GN.ZS (2023)</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">External · FDI</div>
+      <div class="card-title">FDI Net Inflows as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">~1.6%</span>
+          <span class="unit">of GDP (2024)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥2% peer LMICs; ≥5% strong. FDI below the 2011–15 average (2.4%) despite investor roadshows.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Subdued; expected to pick up only as infrastructure &amp; climate improve</div>
+      <div class="card-conversation">Which specific bottlenecks — infrastructure, security, jurisdictional risk — are prioritised to convert nearshoring interest into greenfield FDI beyond existing sectors?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Annex I</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">External · Remittances</div>
+      <div class="card-title">Remittances as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">19.0%</span>
+          <span class="unit">of GDP (2024)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> 3–10% healthy; &gt;15% = dependency risk. Remittances rose ~18% y/y in 2025H1 on deportation fears.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> Projected to stabilise then decline as US migration policy tightens</div>
+      <div class="card-conversation">Remittances are an informal safety net but a competitiveness drag. What mechanisms could channel them toward savings/investment — and cushion households if flows fall?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Box 1</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Debt</div>
+      <div class="card-title">Public Debt as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">26.3%</span>
+          <span class="unit">of GDP (2024)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;55% sustainable; ≤40% &amp; declining = strong. Lowest among WH market-access peers. DSA risk: Moderate.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> Declined 29%→26% through 2024; projected to edge toward 30% by 2030</div>
+      <div class="card-conversation">With ample fiscal space, is the binding constraint financing — or spending quality and execution? How quickly should debt-financed investment scale up?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Annex III</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR II: EXPENDITURE -->
+  <div class="section-header">
+    <div class="section-dot dot-exp"></div>
+    <h2>Pillar II — Expenditure</h2>
+    <div class="score-chip" style="background:var(--orange);">Avg 2.3 / 5</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border2">
+      <div class="card-sub">Sectoral · Education</div>
+      <div class="card-title">Public Education Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">~2.9%</span>
+          <span class="unit">of GDP (2024, central govt)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥4% (UNESCO Incheon); ≥6% strong. Secondary enrolment below 50% — among the lowest in Latin America.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Broadly flat; allocations described by IMF as inadequate to need</div>
+      <div class="card-conversation">What is the multi-year path to raise education spending toward 4% of GDP while improving efficiency, teacher quality and rural access?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Box 3</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">Sectoral · Health</div>
+      <div class="card-title">Public Health Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">~1.4%</span>
+          <span class="unit">of GDP (2024, central govt)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥5% (WHO). Over half the rural population lacks basic health services. Broader general-govt health (incl. IGSS) is somewhat higher.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Chronically low; preventable maternal/child mortality remains high</div>
+      <div class="card-conversation">What is the sequencing to expand coverage and strengthen primary-care delivery — and how is efficiency preserved as spending rises?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Box 3</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Debt Sustainability</div>
+      <div class="card-title">Debt Service as % of Government Revenue</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">~13%</span>
+          <span class="unit">interest / revenue (2024)</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;14.3% interest/revenue (IMF DSF). Ratio elevated largely because the revenue base is small, not because debt is high.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Stable; gross financing needs/revenue broadly in line with peers</div>
+      <div class="card-conversation">How does the Medium-Term Debt Management Strategy weigh cheaper external (Eurobond) financing against developing a domestic yield curve?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Table 2a</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR III: SPENDING EFFECTIVENESS -->
+  <div class="section-header">
+    <div class="section-dot dot-eff"></div>
+    <h2>Pillar III — Spending Effectiveness</h2>
+    <div class="score-chip" style="background:var(--purple);">Avg 2.0 / 5</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border2">
+      <div class="card-sub">PFM Quality</div>
+      <div class="card-title">PEFA Score — Overall PFM Quality</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Latest Assessment</span>
+          <span class="value" style="color:var(--score2);font-size:20px;">2018</span>
+          <span class="unit">dated · prior PEFAs 2013, 2010</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> B or above (recent) = adequate. The most recent national PEFA is 2018 (now &gt;5 years old); a 2026 Climate-PFM annex is planned.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> IMF flags weak execution (92% overall, 79% capex), fragmented planning, poor NDP–budget alignment</div>
+      <div class="card-conversation">Is a refreshed PEFA planned? Which PFM reforms are prioritised — spending reviews, a Value-for-Money function in MoF, IPSAS, integrating K'atun 2032 into the budget?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.pefa.org/country/guatemala" target="_blank">PEFA Guatemala 2018</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR IV: ENABLING ENVIRONMENT -->
+  <div class="section-header">
+    <div class="section-dot dot-env"></div>
+    <h2>Pillar IV — Enabling Environment</h2>
+    <div class="score-chip" style="background:var(--teal);">Avg 1.5 / 5</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border2">
+      <div class="card-sub">Policy · Strategy</div>
+      <div class="card-title">National FfD / INFF Framework</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Status</span>
+          <span class="value" style="color:var(--score2);font-size:19px;">Partial</span>
+          <span class="unit">K'atun 2032 + PGG 2024–28</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> Operational INFF integrated with the budget cycle. Guatemala has a National Development Plan but no integrated financing framework.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Plans poorly linked to multiannual budgeting (per IMF)</div>
+      <div class="card-conversation">Would an INFF help align K'atun 2032 and the PGG with the multiannual budget — and crowd in private finance for the infrastructure agenda?</div>
+      <div class="card-source">📊 <a href="https://financing.desa.un.org/" target="_blank">UN DESA FfD</a></div>
+    </div>
+
+    <div class="card border1">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Rule of Law Index (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">-1.08</span>
+          <span class="unit">2024 · est. scale -2.5 to +2.5</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 global median; ≥0.5 strong. Weak judicial independence; AG under US/EU sanctions; justice processes slow (WJP separately scores 0.44/1).</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Chronically weak; executive–judiciary standoff ongoing</div>
+      <div class="card-conversation">Judicial independence is a binding constraint on investment. Which concrete judicial and prosecutorial reforms are realistic, and how can partners support them?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators" target="_blank">World Bank WGI</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Regulatory Quality (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">-0.29</span>
+          <span class="unit">2024 · est. scale -2.5 to +2.5</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 median; ≥0.5 conducive. Less weak than rule of law (Guatemala's open, market-friendly stance helps), but still below the global median amid red tape and pending laws.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> First anti-trust/Competition Law a step forward; PPP, ports, procurement laws pending</div>
+      <div class="card-conversation">Which regulatory reforms unlock the most private capital fastest — the PPP amendments, the ports law, or the new Public Procurement Law?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators" target="_blank">World Bank WGI</a></div>
+    </div>
+
+    <div class="card border1">
+      <div class="card-sub">Governance · Integrity</div>
+      <div class="card-title">Corruption Perceptions Index (CPI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">25 / 100</span>
+          <span class="unit">Rank 146/180 (2024)</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥50 acceptable; ≥65 strong. Well below the regional average; corruption "endemic in public procurement" (IMF).</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> First upgrade in a decade: 23 (2023) → 25 (2024) → 26 (2025)</div>
+      <div class="card-conversation">The 2024 uptick is driven by the CNC and probity offices. How are these gains locked in via a medium-term anti-corruption strategy and stronger CODEDE oversight?</div>
+      <div class="card-source">📊 <a href="https://www.transparency.org/en/cpi/2024" target="_blank">Transparency International CPI 2024</a></div>
+    </div>
+
+    <div class="card gap border0">
+      <div class="card-sub">Business &amp; Investment Env.</div>
+      <div class="card-title">B-READY — Regulatory Framework, Public Services &amp; Operational Efficiency</div>
+      <span class="gap-tag">Data gap · 3 indicators</span>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Status</span>
+          <span class="value" style="color:var(--muted);font-size:18px;">Not assessed</span>
+          <span class="unit">excluded from average</span>
+        </div>
+        <div class="card-score-badge na">n/a</div>
+      </div>
+      <div class="gap-note">Guatemala is not among the 50 economies in B-READY 2024 or the 101 in the 2025 interim edition. The three B-READY pillar indicators are left blank and excluded from the Pillar IV average (blank-aware).</div>
+      <div class="card-conversation">Would joining B-READY (full coverage planned by 2026) give a credible external benchmark to anchor the investment-climate reform agenda?</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/businessready" target="_blank">World Bank B-READY</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR V: FINANCIAL MARKET DIAGNOSTICS -->
+  <div class="section-header">
+    <div class="section-dot dot-fin"></div>
+    <h2>Pillar V — Financial Market Diagnostics</h2>
+    <div class="score-chip" style="background:var(--blue);">Avg 4.0 / 5</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border4">
+      <div class="card-sub">Risk Premium</div>
+      <div class="card-title">Sovereign Credit Rating</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4);font-size:21px;">BB+ / Ba1 / BB</span>
+          <span class="unit">S&amp;P / Moody's / Fitch</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> BBB- = investment grade. Two of three agencies rate Guatemala one notch below IG; S&amp;P upgraded to BB+ in May 2025.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Improving market access; $1.5bn Eurobond issued July 2025</div>
+      <div class="card-conversation">The IMF notes passing the AML/CFT law is critical to the investment-grade path. What is the realistic sequencing toward an upgrade?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, ¶9</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Maturity &amp; Risk Structure</div>
+      <div class="card-title">Average Maturity of Sovereign / External Debt</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">~10 yr</span>
+          <span class="unit">avg time to maturity</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥10 yr adequate for infrastructure finance. Debt portfolio ATM ~10 years; Eurobonds extend the curve. Avg interest rate ~6.3%.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Solid tenor, but the domestic market is shallow (no central securities depository)</div>
+      <div class="card-conversation">How can shorter-tenor domestic issuance build a local yield curve and consolidate issuances — without crowding out private credit?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, ¶27</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Private Finance</div>
+      <div class="card-title">Domestic Credit to Private Sector as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">43.3%</span>
+          <span class="unit">of GDP (2024)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% (IMF norm); ≥20% strong (proxy for financial depth). Credit grew in double digits since 2021, now decelerating.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Robust real growth, led by large-corporate and consumer lending</div>
+      <div class="card-conversation">Is credit reaching SMEs and productive sectors, or concentrated in consumer and large-corporate segments — and what would broaden access?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Table 4</a></div>
+    </div>
+
+    <div class="card gap border0">
+      <div class="card-sub">Private Sector Constraints</div>
+      <div class="card-title">% Firms Credit-Constrained &amp; % Citing Unfavourable Loan Conditions</div>
+      <span class="gap-tag">Data gap · 2 indicators</span>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Status</span>
+          <span class="value" style="color:var(--muted);font-size:18px;">No recent survey</span>
+          <span class="unit">excluded from average</span>
+        </div>
+        <div class="card-score-badge na">n/a</div>
+      </div>
+      <div class="gap-note">Guatemala's most recent World Bank Enterprise Survey is from 2017 — too dated for current scoring. Both firm-finance indicators are left blank and excluded from the Pillar V average (blank-aware).</div>
+      <div class="card-conversation">A refreshed Enterprise Survey would update firm-level access-to-finance diagnostics — is one planned with the World Bank?</div>
+      <div class="card-source">📊 <a href="https://www.enterprisesurveys.org/en/data/exploretopics/finance" target="_blank">WB Enterprise Surveys</a></div>
+    </div>
+
+    <div class="card gap border0">
+      <div class="card-sub">Capital Market Depth</div>
+      <div class="card-title">Financial Institutions Development Index (IMF)</div>
+      <span class="gap-tag">Data gap · 1 indicator</span>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Status</span>
+          <span class="value" style="color:var(--muted);font-size:18px;">Not traced</span>
+          <span class="unit">excluded from average</span>
+        </div>
+        <div class="card-score-badge na">n/a</div>
+      </div>
+      <div class="gap-note">The IMF's Financial Development Index (Svirydzenka 2016) publishes a Guatemala series, but it is distributed only through the IMF's interactive data portal and the World Bank Data360 platform — both JavaScript-rendered, with no static page or accessible API endpoint we could verify Guatemala's exact figure against. Rather than carry forward an unsourced number, this indicator is left blank and excluded from the Pillar V average (blank-aware).</div>
+      <div class="card-conversation">Would direct access to the IMF FDI bulk-download file (data.imf.org, dataset IMF.MCM:FDI) let us pull and verify Guatemala's series properly?</div>
+      <div class="card-source">📊 <a href="https://data.imf.org/en/datasets/IMF.MCM:FDI" target="_blank">IMF Financial Development Index (portal — not directly queryable)</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Financial Sector Health</div>
+      <div class="card-title">Non-Performing Loans (NPL) Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">~2.5%</span>
+          <span class="unit">of gross loans (2024)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% healthy (Basel III); &gt;20% systemic risk. NPLs rose from 1.8% (end-2023) to ~2.5%; provisioning fell to ~135%.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> Slight rise, concentrated in consumer, microcredit and mortgages</div>
+      <div class="card-conversation">Asset quality is strong, but consumer NPLs are creeping up. How is the SIB monitoring consumer-credit and remittance-linked risks as provisioning normalises?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Table 5</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Financial Sector Health</div>
+      <div class="card-title">Customer Deposits to Total Loans Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">~100%</span>
+          <span class="unit">deposits ≈ loans (2024)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥80% deposit-funded = stable. Banks are deposit-funded and liquid; abundant structural liquidity in the system.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Stable, traditional deposit-funded model</div>
+      <div class="card-conversation">Does excess structural liquidity (and bank preference for Treasury paper) crowd out private lending or complicate monetary transmission?</div>
+      <div class="card-source"><span class="imf-badge">IMF AIV 2025</span> <a href="https://www.imf.org/en/publications/cr/issues/2025/09/12/guatemala-2025-article-iv-consultation-press-release-staff-report-and-statement-by-the-570287" target="_blank">CR 25/260, Table 4</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">Financial Sector Health</div>
+      <div class="card-title">Bank Capital to Assets Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">~6.5%</span>
+          <span class="unit">capital/assets (unweighted)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥8% Basel min; ≥10% good. Unweighted ratio is low, but <strong>regulatory capital to risk-weighted assets is a strong 15.7%</strong> — system is well-capitalised.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Leverage ratio worth watching as Basel III provisioning phases in to 2028</div>
+      <div class="card-conversation">The unweighted leverage ratio (~6.5%) sits below the risk-weighted CAR (15.7%). Is the leverage ratio a supervisory focus as expected-loss provisioning is rolled out?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/FB.BNK.CAPA.ZS?locations=GT" target="_blank">World Bank WDI</a> · <span class="imf-badge">IMF AIV 2025</span></div>
+    </div>
+
+  </div>
+
+  <!-- METHOD CAVEAT -->
+  <div class="caveat-banner" style="margin-top:36px;">
+    <strong>On data gaps &amp; scoring.</strong> Pillar and overall scores use <strong>blank-aware averaging</strong> — missing indicators are excluded, never treated as zero. Six indicators are currently un-scored for Guatemala: the three <strong>B-READY</strong> pillars (Guatemala not yet assessed), the two <strong>Enterprise Survey</strong> firm-finance indicators (last survey 2017, too dated), and the <strong>IMF Financial Development Index</strong> (Guatemala's value could not be verified against an accessible primary source — see note below). The <strong>bank capital-to-assets</strong> score (2) reflects the unweighted leverage ratio; on a risk-weighted basis the banking system is well-capitalised (CAR ~15.7%). WGI Rule-of-Law (−1.08) and Regulatory-Quality (−0.29) are the 2024 World Bank WGI point estimates on the −2.5 to +2.5 standard-normal scale — distinct from the newer 0–100 WGI score. Where the IMF Article IV (CR 25/260) is the source, cards are tagged <span class="imf-badge">IMF AIV 2025</span>.
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><strong>Sources &amp; Methodology:</strong> Macro-fiscal and financial-sector indicators are drawn primarily from the IMF 2025 Article IV Consultation for Guatemala (Country Report No. 25/260, Sep 2025). Governance, integrity, AML and aid indicators use World Bank WGI, Transparency International CPI 2024, the Basel AML Index 2024, World Bank WDI, PEFA, and UN DESA. Scores (1–5) reflect assessment against fixed international benchmarks; pillar averages and the overall FfD score use blank-aware (AVERAGEIF) logic. Values marked "~" are estimates or single-source figures pending verification.</p>
+  <p style="margin-top:8px;"><strong>Intended Use:</strong> This scorecard is a structured conversation starter for donor–government dialogue on FfD priorities. It is not an official government document. Data should be verified against primary sources before use in formal assessments.</p>
+  <p style="margin-top:8px;"><strong>Critical Context:</strong> Guatemala's challenge is not instability but a low-investment, "small-footprint state" equilibrium — strong buffers and market access alongside the hemisphere's lowest revenue mobilisation, under-funded social services, weak governance, and remittance dependency now exposed to US trade and migration shifts. FfD dialogue should be framed around converting fiscal space into well-executed, high-quality public investment.</p>
+</div>
+
+</body></html>
