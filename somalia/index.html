@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Somalia FfD Scorecard 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1923;
+    --paper: #f5f0e8;
+    --paper2: #ede8df;
+    --accent: #4189dd;
+    --gold: #c9a227;
+    --green: #2a6b3c;
+    --blue: #1a4a7a;
+    --teal: #1a6b6b;
+    --orange: #b85c1a;
+    --purple: #5a2a7a;
+    --crimson: #8a1a3a;
+    --muted: #6b6555;
+    --border: #cdc5b2;
+
+    --score1: #c0392b;
+    --score2: #e67e22;
+    --score3: #f1c40f;
+    --score4: #27ae60;
+    --score5: #1a7a4a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── COVER ─────────────────────────────── */
+  .cover {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 56px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(65,137,221,0.20) 0%, transparent 70%);
+  }
+  .cover-flag {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .flag-circle {
+    width: 48px; height: 32px;
+    background: #4189dd;
+    border-radius: 4px;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .flag-circle::after {
+    content: '★';
+    color: white;
+    font-size: 20px;
+  }
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .cover-title span { color: var(--accent); }
+  .cover-sub {
+    font-size: 15px;
+    color: rgba(245,240,232,0.7);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .cover-meta-item {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .cover-meta-item .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(245,240,232,0.45);
+    text-transform: uppercase;
+  }
+  .cover-meta-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--paper);
+  }
+
+  /* ── PILLAR SUMMARY BANNER (replaces aggregate score) ────── */
+  .score-banner {
+    background: var(--ink);
+    padding: 28px 48px 36px;
+  }
+  .pillar-summary-banner { display: flex; flex-direction: column; gap: 20px; }
+  .pillar-summary-intro {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(245,240,232,0.12);
+  }
+  .pillar-summary-intro-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .pillar-summary-intro p {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: rgba(245,240,232,0.65);
+    margin: 0;
+  }
+  .pillar-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .pillar-summary-card {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .pillar-summary-head {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pillar-summary-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--paper);
+  }
+  .pillar-summary-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.45);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .pillar-summary-count.nodata { color: var(--gold); }
+  .pillar-summary-text {
+    font-size: 12px;
+    line-height: 1.55;
+    color: rgba(245,240,232,0.72);
+  }
+  .pillar-summary-card--nodata .pillar-summary-text {
+    font-style: italic;
+    color: rgba(245,240,232,0.55);
+  }
+
+  /* ── CONTEXT STRIP ───────────────────────── */
+  .context-strip {
+    background: var(--gold);
+    padding: 14px 48px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .context-strip .icon { font-size: 18px; }
+  .context-strip p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .context-strip strong { font-weight: 700; }
+
+  /* ── DATA COMPLETENESS STRIP ─────────────── */
+  .completeness-strip {
+    background: var(--paper2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 48px;
+    display: flex; align-items: center; gap: 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .completeness-strip .icon { font-size: 14px; }
+  .completeness-strip strong { color: var(--ink); font-weight: 600; }
+  .completeness-meter {
+    flex: 1; max-width: 240px;
+    height: 6px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .completeness-meter-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  /* ── MAIN CONTENT ────────────────────────── */
+  .main { padding: 40px 48px; max-width: 1200px; margin: 0 auto; }
+
+  /* ── SECTION HEADER ──────────────────────── */
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px; margin-top: 40px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .section-header .score-chip {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 4px 14px;
+    border-radius: 20px;
+    background: var(--ink);
+    color: var(--paper);
+    white-space: nowrap;
+  }
+  .section-header .score-chip.nodata {
+    background: var(--muted);
+    font-style: italic;
+  }
+  .section-header .indicator-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+
+  /* ── INDICATOR CARDS ─────────────────────── */
+  .indicators-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(15,25,35,0.1);
+    transform: translateY(-2px);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+
+  .card-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+
+  .card-values {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 12px;
+  }
+  .card-current {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .card-current .label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .card-current .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .card-current .unit {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .card-score-badge {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+  }
+  .card-score-badge.nd {
+    background: var(--paper2);
+    color: var(--muted);
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+
+  .card-benchmark {
+    background: var(--paper);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .card-benchmark strong { color: var(--ink); font-weight: 600; }
+
+  .card-trend {
+    display: flex; align-items: flex-start; gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .trend-arrow { font-size: 14px; line-height: 1; flex-shrink: 0; }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--score1); }
+  .trend-flat { color: var(--orange); }
+
+  .card-conversation {
+    background: #fffbf0;
+    border: 1px dashed var(--gold);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    color: #7a5c00;
+    line-height: 1.5;
+  }
+  .card-conversation::before {
+    content: '💬 ';
+  }
+
+  .card-missing {
+    background: #f7f3ec;
+    border: 1px dashed var(--muted);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .card-missing::before {
+    content: '⊘ ';
+    font-style: normal;
+  }
+
+  .card-imf {
+    background: #eef4fc;
+    border-left: 3px solid var(--blue);
+    border-radius: 4px;
+    padding: 7px 10px;
+    font-size: 11.5px;
+    color: var(--blue);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .card-imf strong { font-weight: 700; }
+  .card-imf::before {
+    content: '🏛 IMF Art. IV (Nov 2024): ';
+    font-weight: 700;
+  }
+
+  .card-source {
+    margin-top: 10px;
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap;
+  }
+  .card-source a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--blue);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+  .card-source a:hover { text-decoration: underline; }
+  .card-source .src-sep {
+    color: var(--border);
+    font-size: 10px;
+  }
+
+  /* Score colours */
+  .s1 { background: var(--score1); }
+  .s2 { background: var(--score2); }
+  .s3 { background: var(--score3); color: var(--ink) !important; }
+  .s4 { background: var(--score4); }
+  .s5 { background: var(--score5); }
+
+  .border1::before { background: var(--score1); }
+  .border2::before { background: var(--score2); }
+  .border3::before { background: var(--score3); }
+  .border4::before { background: var(--score4); }
+  .border5::before { background: var(--score5); }
+  .borderND::before { background: var(--border); }
+
+  /* Pillar section colours */
+  .dot-flows    { background: var(--green); }
+  .dot-exp      { background: var(--orange); }
+  .dot-eff      { background: var(--purple); }
+  .dot-env      { background: var(--teal); }
+  .dot-fmd      { background: var(--crimson); }
+
+  /* ── KEY FINDINGS ─────────────────────────── */
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .finding-card {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .finding-card .finding-icon { font-size: 24px; margin-bottom: 10px; }
+  .finding-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--gold);
+  }
+  .finding-card p {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.8);
+  }
+
+  /* ── SCORE LEGEND ─────────────────────────── */
+  .legend {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 32px;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11.5px; color: var(--muted);
+  }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+
+  /* ── FOOTER ───────────────────────────────── */
+  .footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.5);
+    padding: 24px 48px;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 48px;
+  }
+  .footer strong { color: rgba(245,240,232,0.8); }
+
+  @media (max-width: 640px) {
+    .cover, .main, .score-banner { padding-left: 24px; padding-right: 24px; }
+    .context-strip, .completeness-strip { padding-left: 24px; padding-right: 24px; }
+    .indicators-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-flag">
+    <div class="flag-circle"></div>
+    <span class="cover-label">Financing for Development</span>
+  </div>
+  <div class="cover-title">Somalia<br><span>FfD Scorecard</span></div>
+  <div class="cover-sub">Country-Level Assessment · Conversation Starter for Donors &amp; Government</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span class="label">Reference Year</span>
+      <span class="value">2024 (IMF Art. IV)</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">GDP (Nominal)</span>
+      <span class="value">$12.1bn USD (2024 proj)</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">Population</span>
+      <span class="value">15.6 million</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">Real GDP Growth</span>
+      <span class="value">4.0% (2024 &amp; 2025)</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">Country Classification</span>
+      <span class="value">LDC · FCS · Post-HIPC (Dec 2023)</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="label">IMF Programme</span>
+      <span class="value">ECF · 2nd Review Dec 2024</span>
+    </div>
+  </div>
+</div>
+
+<!-- PILLAR SUMMARY BANNER (replaces aggregate score — see methodology note) -->
+<div class="score-banner pillar-summary-banner">
+  <div class="pillar-summary-intro">
+    <div class="pillar-summary-intro-label">No Aggregate Score</div>
+    <p>With more than a third of indicators unscored — and entire pillars resting on one or zero data points — a single overall number would imply false precision. Below: what the available evidence says, pillar by pillar.</p>
+  </div>
+  <div class="pillar-summary-grid">
+
+    <div class="pillar-summary-card">
+      <div class="pillar-summary-head">
+        <div class="section-dot dot-flows"></div>
+        <span class="pillar-summary-title">I. Flows</span>
+        <span class="pillar-summary-count">5 / 6</span>
+      </div>
+      <p class="pillar-summary-text">A critically narrow tax base (2.2% GDP) sits beneath a structure dominated by remittances and ODA — both carrying their own dependency risk. The debt picture is clean, but that reflects HIPC relief, not borrowing capacity.</p>
+    </div>
+
+    <div class="pillar-summary-card">
+      <div class="pillar-summary-head">
+        <div class="section-dot dot-exp"></div>
+        <span class="pillar-summary-title">II. Expenditure</span>
+        <span class="pillar-summary-count">3 / 3</span>
+      </div>
+      <p class="pillar-summary-text">Education and health spending are both near-zero on-budget. The one favourable reading — debt service — is favourable only because Somalia has almost nothing left to repay post-HIPC, not because fiscal space is strong.</p>
+    </div>
+
+    <div class="pillar-summary-card pillar-summary-card--nodata">
+      <div class="pillar-summary-head">
+        <div class="section-dot dot-eff"></div>
+        <span class="pillar-summary-title">III. Spending Effectiveness</span>
+        <span class="pillar-summary-count nodata">0 / 1</span>
+      </div>
+      <p class="pillar-summary-text">No scored indicator. IMF reporting describes steady PFM reform (SFMIS, payroll integration, audit law) — but no current PEFA assessment exists to verify it against. This pillar is a data gap, not a weak score.</p>
+    </div>
+
+    <div class="pillar-summary-card">
+      <div class="pillar-summary-head">
+        <div class="section-dot dot-env"></div>
+        <span class="pillar-summary-title">IV. Enabling Environment</span>
+        <span class="pillar-summary-count">2 / 7</span>
+      </div>
+      <p class="pillar-summary-text">Sparse, but what's visible is stark: a CPI of 9/100 and no operational financing framework. Most governance and business-climate indicators (WGI, B-Ready) are simply unmeasured for Somalia — this picture is incomplete, not just weak.</p>
+    </div>
+
+    <div class="pillar-summary-card">
+      <div class="pillar-summary-head">
+        <div class="section-dot dot-fmd"></div>
+        <span class="pillar-summary-title">V. Fin. Market Diagnostics</span>
+        <span class="pillar-summary-count">7 / 8</span>
+      </div>
+      <p class="pillar-summary-text">The most complete pillar — and a coherent story: banks are well-capitalised and liquid (13.7% CAR, NPLs low), but a 300%+ deposit-to-loan ratio shows credit isn't reaching firms. A plumbing problem, not a capital problem.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONTEXT STRIP -->
+<div class="context-strip">
+  <span class="icon">⚠️</span>
+  <p><strong>Post-HIPC Reform Momentum:</strong> Somalia reached HIPC Completion Point in December 2023 — clearing external debt and unlocking a deeper IMF ECF arrangement. The IMF Article IV (Nov 2024) confirms strong program performance, real GDP growth upgraded to 4.0%, NPLs healthy at 3.4%, and publication of the Medium-Term Revenue Roadmap 2024–2027. The binding constraint remains domestic revenue at ~2.1% of GDP, alongside heavy reliance on remittances (~20% of GDP) and grants.</p>
+</div>
+
+<!-- DATA COMPLETENESS STRIP -->
+<div class="completeness-strip">
+  <span class="icon">📊</span>
+  <p><strong>Data completeness: 17 of 25 indicators scored (68%).</strong> Given uneven coverage across pillars — Pillar III unscored, Pillar IV scored on only 2 of 7 — this scorecard presents indicator-level scores and a qualitative summary per pillar rather than a numeric pillar or overall average.</p>
+  <div class="completeness-meter">
+    <div class="completeness-meter-fill" style="width:68%;background:var(--score3);"></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span style="font-size:11.5px;font-weight:600;color:var(--ink);margin-right:6px;">Score:</span>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score1)"></div>1 – Critical</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score2)"></div>2 – Weak</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score3)"></div>3 – Moderate</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score4)"></div>4 – Good</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--score5)"></div>5 – Excellent</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--border)"></div>n/d – No data</div>
+    <span style="font-size:11px;color:var(--muted);margin-left:12px;">💬 = Conversation starter · 🏛 = IMF Article IV insight</span>
+  </div>
+
+  <!-- KEY FINDINGS -->
+  <div class="findings-grid">
+    <div class="finding-card">
+      <div class="finding-icon">🟢</div>
+      <h4>Reform Momentum</h4>
+      <p>IMF Art. IV (Nov 2024) confirms strong ECF program performance — all quantitative performance criteria met, MTRR 2024–2027 published, growth upgraded to 4.0%.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🔴</div>
+      <h4>Revenue Floor</h4>
+      <p>Tax revenue at ~2.1% of GDP remains the single binding constraint. Domestic revenue is rising — $268m by end-Sept 2024, above program floor — but still far from the 15% IMF minimum.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟡</div>
+      <h4>Diaspora Lifeline</h4>
+      <p>IMF puts remittances at ~19.8% of GDP, well above WDI's 15.8% — likely the largest single source of external finance, exceeding grants ($442m) and FDI combined.</p>
+    </div>
+    <div class="finding-card">
+      <div class="finding-icon">🟢</div>
+      <h4>Banking Health</h4>
+      <p>Private sector credit grew 40% y-o-y (2024Q2), NPLs at a healthy 3.4%, and Ziraat Bank (Türkiye) entered the market — financial deepening accelerating from a very low base.</p>
+    </div>
+  </div>
+
+  <!-- PILLAR I: FLOWS -->
+  <div class="section-header">
+    <div class="section-dot dot-flows"></div>
+    <h2>Pillar I — Flows</h2>
+    <span class="indicator-count">5 of 6 scored</span>
+    <div class="score-chip" style="background:var(--green);">Revenue-Constrained</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border1">
+      <div class="card-sub">Domestic · Tax</div>
+      <div class="card-title">Tax Revenue as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">2.1%</span>
+          <span class="unit">of GDP (2024 proj)</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% IMF minimum; ≥20% strong; OECD avg ~33%. Somalia is among the lowest globally.</div>
+      <div class="card-imf">Domestic revenue (tax + non-tax) rising to <strong>3.0% of GDP in 2024</strong>, with $268m collected by end-Sept 2024 — above program floor. Customs modernisation (SOMCAS) and a new sales tax e-system driving improvements.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Improving trajectory but from very low base; Income Tax Law expected mid-2025</div>
+      <div class="card-conversation">The MTRR targets ~0.3pp of GDP in additional revenue measures for 2025. What is the realistic 5-year path to fully covering operational expenditure with domestic revenues (IMF target: 2027), and how will fiscal federalism share customs revenue with FMS?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/GC.TAX.TOTL.GD.ZS?locations=SO" target="_blank">WDI — GC.TAX.TOTL.GD.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346</a></div>
+    </div>
+
+    <div class="card borderND">
+      <div class="card-sub">Domestic · Integrity</div>
+      <div class="card-title">Illicit Financial Flows — Basel AML Index</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">n/a</span>
+          <span class="unit">not assessed</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> Basel AML Index &lt;3.5 acceptable; &lt;3.0 low risk; &gt;7.0 critical.</div>
+      <div class="card-imf">Somalia's AML/CFT regime is being evaluated by <strong>MENAFATF</strong> — onsite visit expected 2025, mutual evaluation report in 2026. AML/CFT Act amendments submitted to Parliament March 2024.</div>
+      <div class="card-missing">Not in published Basel AML Index. Recommend tracking the MENAFATF mutual evaluation report (2026) as the primary forward-looking proxy.</div>
+      <div class="card-source">📊 <a href="https://index.baselgovernance.org/" target="_blank">Basel Institute on Governance</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">External · ODA</div>
+      <div class="card-title">Net ODA Received as % of GNI</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">20.4%</span>
+          <span class="unit">of GNI</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;10% GNI = low dependency; &gt;20% signals severe aid dependence and exposure to donor cycle volatility.</div>
+      <div class="card-imf">Grants projected at <strong>4.6% of GDP in 2024</strong>; falling sharply to ~0.3% by 2029 as World Bank shifts from grants to concessional loans (50-year maturity) starting July 2025.</div>
+      <div class="card-trend"><span class="trend-arrow trend-down">↓</span> Grant tail expected to narrow rapidly — early warning for donor coordination</div>
+      <div class="card-conversation">IMF projects deficits of 1.5–2.0% of GDP from 2026 as grant share collapses. How is the donor compact being restructured to manage the cliff, particularly for off-budget projects ($351m in 2024)?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/DT.ODA.ODAT.GN.ZS?locations=SO" target="_blank">WDI — DT.ODA.ODAT.GN.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 Tbl 1</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">External · FDI</div>
+      <div class="card-title">FDI Net Inflows as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">5.7%</span>
+          <span class="unit">of GDP (2024 proj)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥2% LMIC peer; ≥5% strong diversified inflows. SSA avg ~2.5%.</div>
+      <div class="card-imf">FDI <strong>upgraded from 5.4% (1st review) to 5.7% of GDP for 2024</strong>; sustained at 5.4% through to 2029. Telecoms, ports, livestock trade dominate the base — petroleum sector regulatory framework being finalised (EIFRL regulations end-Jan 2025).</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Stable, diversified inflows; second foreign bank (after Ziraat) expected 2025Q1</div>
+      <div class="card-conversation">Petroleum sector transparency (PSAs, EIFRL) is a focus of the IMF Art. IV. How can donor TA support sequencing — sector framework first, licensing second — to avoid repeating extractive-sector mistakes seen elsewhere in the region?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/BX.KLT.DINV.WD.GD.ZS?locations=SO" target="_blank">WDI — BX.KLT.DINV.WD.GD.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">External · Remittances</div>
+      <div class="card-title">Remittances as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">15.8% / 19.8%</span>
+          <span class="unit">WDI / IMF (2024)</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> 3–10% GDP = healthy range; &gt;15% indicates dependency risk.</div>
+      <div class="card-imf">Remittances projected at <strong>19.8% of GDP in 2024</strong>, growing ~14% y-o-y; sustained at ~20% through 2029. Substantially higher than WDI's 15.8% figure — likely captures MTB/Hawala flows more comprehensively.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Strong growth; correspondent-banking de-risking remains a structural vulnerability</div>
+      <div class="card-conversation">Both figures point to remittances as Somalia's largest external flow — but the 4pp gap between WDI and IMF estimates matters for scoring. Should the scorecard adopt IMF Art. IV numbers as the primary source for FCS contexts where WDI undercounts informal flows?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/BX.TRF.PWKR.DT.GD.ZS?locations=SO" target="_blank">WDI — BX.TRF.PWKR.DT.GD.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 Tbl 1</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Debt</div>
+      <div class="card-title">Public Debt as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">6.4%</span>
+          <span class="unit">of GDP (IMF 2024 proj)</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;55% GDP (IMF LIC DSF threshold); ≤40% AND declining = score 5.</div>
+      <div class="card-imf">Public debt collapsed from <strong>38.2% (2022) to 6.4% (2024 proj)</strong> following HIPC Completion (Dec 2023). Projected to rise modestly to 12.7% by 2029 as concessional borrowing resumes. DSA classifies Somalia at <strong>moderate risk of debt distress</strong>.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Major improvement post-HIPC; PM decree on debt policy issued July 2024</div>
+      <div class="card-conversation">Low headline debt is real progress, but absorptive capacity is limited and there is no sovereign rating. What is the framework — debt management capacity, concessional ceilings, IFI engagement — for the gradual resumption of borrowing post-HIPC?</div>
+      <div class="card-source">📊 <a href="https://www.imf.org/external/datamapper/GGXWDG_NGDP@WEO/SOM" target="_blank">IMF WEO — GGXWDG_NGDP</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 Tbl 1</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR II: EXPENDITURE -->
+  <div class="section-header">
+    <div class="section-dot dot-exp"></div>
+    <h2>Pillar II — Expenditure</h2>
+    <span class="indicator-count">3 of 3 scored</span>
+    <div class="score-chip" style="background:var(--orange);">Critically Underspent</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border1">
+      <div class="card-sub">Sectoral · Education</div>
+      <div class="card-title">Public Education Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">~0%</span>
+          <span class="unit">of GDP (on-budget)</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥4% GDP (UNESCO/Incheon). Reported figure near zero — actual spending largely off-budget (donors, NGOs, household out-of-pocket).</div>
+      <div class="card-imf">Around <strong>66% of the population lacks formal education</strong>; ~3m children out of school in 2022. IMF notes "higher spending on education and health is being accommodated" in the 2025 budget. 3,000 new teachers hired for public schools in 2023. Federal/FMS Ministers of Education adopted an agreement on respective roles.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Federal-state coordination improving; donor-financed parallel systems still dominate</div>
+      <div class="card-conversation">Public education spending registers near zero in official statistics, yet donor and household spending fills the gap. What is the roadmap to bring education financing on-budget under federal-state arrangements, and how can the new federal/FMS education agreement be operationalised?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/SE.XPD.TOTL.GD.ZS?locations=SO" target="_blank">WDI — SE.XPD.TOTL.GD.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶45</a></div>
+    </div>
+
+    <div class="card border1">
+      <div class="card-sub">Sectoral · Health</div>
+      <div class="card-title">Public Health Expenditure as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">0.53%</span>
+          <span class="unit">of GDP</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥5% GDP (WHO); ≥15% of govt budget (Abuja Declaration 2001). Critically below benchmark.</div>
+      <div class="card-imf">2025 budget accommodates "higher spending on education and health." Notable 2023 achievements: <strong>2 new healthcare facilities established</strong>. Baxnaano social protection programme (World Bank) reaching 50,000 households.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Below Abuja benchmark; out-of-pocket and donor-financed health dominate</div>
+      <div class="card-conversation">At 0.53% of GDP, public health spending is roughly 10× below the WHO benchmark. What is the medium-term financing path for primary health, and how is the Baxnaano programme being expanded into a broader social protection system?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/SH.XPD.GHED.GD.ZS?locations=SO" target="_blank">WDI — SH.XPD.GHED.GD.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶46</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Fiscal Space</div>
+      <div class="card-title">Debt Service as % of Government Revenue</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">0.1%</span>
+          <span class="unit">interest / revenue</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> IMF DSF: interest payments &lt;14.3% of revenue. Score 5 = &lt;5% interest payments.</div>
+      <div class="card-imf">Interest expenditure at <strong>0.1% of GDP in 2024</strong> — minimal post-HIPC. DSA classifies Somalia at <strong>moderate risk of debt distress</strong> due to limited revenue capacity, not stock vulnerability.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Exceptional fiscal space on debt service; revenue side is the binding constraint</div>
+      <div class="card-conversation">The rubric scores this 5 because interest payments are minuscule — but the underlying issue is the revenue denominator (2.1% tax/GDP). How is the IMF programme sequencing DRM reforms before any return to non-concessional borrowing?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/GC.XPN.INTP.RV.ZS?locations=SO" target="_blank">WDI — GC.XPN.INTP.RV.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 Tbl 2</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR III: SPENDING EFFECTIVENESS -->
+  <div class="section-header">
+    <div class="section-dot dot-eff"></div>
+    <h2>Pillar III — Spending Effectiveness</h2>
+    <span class="indicator-count">0 of 1 scored</span>
+    <div class="score-chip nodata">No data</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card borderND">
+      <div class="card-sub">PFM Quality</div>
+      <div class="card-title">PEFA Score — Overall PFM Quality</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">n/a</span>
+          <span class="unit">no federal-level PEFA</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> B or above = adequate PFM. Sub-national PEFAs exist for some FMS but no current federal-level overall score in framework dataset.</div>
+      <div class="card-imf">IMF reports active PFM reforms under the ECF: <strong>2023 Audit Law regulations issued June 2024</strong>; digital signatures in SFMIS (SB#8, end-June 2025); non-payroll compensation reforms; debt policy decree (July 2024); Annual Debt Management Report (proposed SB#11). These offer rich proxy evidence ahead of any next PEFA assessment.</div>
+      <div class="card-missing">No federal PEFA in the dataset. Recommend an analyst-scored qualitative assessment drawing on IMF ECF Structural Benchmarks and World Bank PFM reviews as proxy until a formal PEFA is undertaken.</div>
+      <div class="card-source">📊 <a href="https://www.pefa.org/assessments?search_api_fulltext=somalia" target="_blank">PEFA Secretariat</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 Tbl 11</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR IV: ENABLING ENVIRONMENT -->
+  <div class="section-header">
+    <div class="section-dot dot-env"></div>
+    <h2>Pillar IV — Enabling Environment</h2>
+    <span class="indicator-count">2 of 7 scored</span>
+    <div class="score-chip" style="background:var(--teal);">Weak &amp; Incomplete</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card border1">
+      <div class="card-sub">Strategy</div>
+      <div class="card-title">National FfD / INFF Framework</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">None / donor-led</span>
+          <span class="unit">no operational INFF</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> Operational INFF integrated with national budget cycle (Addis Ababa Agenda recommendation).</div>
+      <div class="card-imf"><strong>Substantial development since prior scoring:</strong> Medium-Term Revenue Roadmap (MTRR) 2024–2027 <strong>published June 29, 2024</strong> (ECF SB#1, met). <strong>Centennial Vision 2060</strong> and <strong>National Transformation Plan (NTP) 2025–2029</strong> under preparation to succeed NDP-9. This evidence may justify uplifting the score to 2 (NDP with financing chapter) or 3 (in development with country ownership) in the next iteration.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Score is lagging the evidence — recommend revisit with Excel rubric</div>
+      <div class="card-conversation">The MTRR is effectively a financing strategy for the revenue side. With NTP 2025–2029 in preparation, is now the moment for UNDP/UN DESA support to formalise an integrated INFF, building on MTRR + NTP rather than as a parallel exercise?</div>
+      <div class="card-source">📊 <a href="https://inff.org/country/somalia" target="_blank">UN DESA / INFF Knowledge Platform</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶22, ¶46</a></div>
+    </div>
+
+    <div class="card borderND">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Rule of Law Index (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">n/a</span>
+          <span class="unit">not in scorecard dataset</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 (global median); ≥0.5 strong; &lt;-0.7 very weak. Somalia historically near global floor.</div>
+      <div class="card-imf">IMF notes "<strong>continued fragility, regional geopolitical tensions, climate shocks, food insecurity</strong>" as key downside risks. Justice and rule-of-law institutions still being rebuilt federally and at FMS level. UNCAC accessed and African Union/Arab anti-corruption conventions ratified.</div>
+      <div class="card-missing">Value not populated. Pull RL.EST from the WGI 2024 release; published scores place Somalia in the bottom percentiles. Track separately for federal vs FMS variation.</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators/interactive-data-access" target="_blank">WGI — RL.EST</a></div>
+    </div>
+
+    <div class="card borderND">
+      <div class="card-sub">Governance</div>
+      <div class="card-title">Regulatory Quality (WGI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">n/a</span>
+          <span class="unit">not in scorecard dataset</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥0.0 (global median); ≥0.5 conducive to private sector. Somalia historically very weak.</div>
+      <div class="card-imf">CBS issued <strong>banking regulations on capital adequacy and liquidity coverage ratios (Jan 2024)</strong>; Income Tax Bill submitted to Parliament July 2024; PPP bill submitted August 2024; EIFRL regulations due end-Jan 2025. Active regulatory build-out under the ECF.</div>
+      <div class="card-missing">Not populated. Pull RQ.EST from WGI and re-score. Regulatory architecture is being rebuilt federally and by FMS in parallel; expect significant variation across geography and sectors.</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators/interactive-data-access" target="_blank">WGI — RQ.EST</a></div>
+    </div>
+
+    <div class="card border1">
+      <div class="card-sub">Governance · Integrity</div>
+      <div class="card-title">Corruption Perceptions Index (CPI)</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">9 / 100</span>
+          <span class="unit">bottom-quartile global rank</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥50 acceptable; ≥65 strong; &lt;30 severe corruption risk. Somalia consistently among the worst-rated countries globally.</div>
+      <div class="card-imf">IMF flags governance and anti-corruption as a key reform area: <strong>2023 Audit Law + 2024 regulations</strong>; UNCAC + AU/Arab conventions ratified; UNTOC submitted to Parliament Feb 2024; National Anti-Corruption Strategy in place. <strong>Petroleum sector transparency (PSAs, EIFRL)</strong> identified as priority.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> CPI score persistently low; institutional milestones laying groundwork</div>
+      <div class="card-conversation">CPI of 9 is the largest single constraint on absorptive capacity and credible donor channels. The 2023 Audit Law and petroleum sector transparency reforms are positive — what is the timeline for Anti-Corruption Commission operationalisation, and how are asset declarations being enforced?</div>
+      <div class="card-source">📊 <a href="https://www.transparency.org/en/cpi/2023/index/som" target="_blank">Transparency International CPI</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶45, ¶47</a></div>
+    </div>
+
+    <div class="card borderND">
+      <div class="card-sub">Business Environment</div>
+      <div class="card-title">B-Ready — Regulatory Framework</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">n/a</span>
+          <span class="unit">not assessed</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70/100 enabling; ≥85 best practice. Replaces Doing Business indicators.</div>
+      <div class="card-missing">Somalia not yet included in published B-Ready cohorts. Use IFC investment climate assessments and the Public-Private Partnerships Bill (Parliament, August 2024) as interim proxies.</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/businessready" target="_blank">World Bank B-Ready</a></div>
+    </div>
+
+    <div class="card borderND">
+      <div class="card-sub">Business Environment</div>
+      <div class="card-title">B-Ready — Public Services</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">n/a</span>
+          <span class="unit">not assessed</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70/100 adequate; ≥85 strong infrastructure support.</div>
+      <div class="card-missing">Not yet covered by B-Ready. Public services for business (utilities, registries, courts) are highly variable by FMS; consider sub-national proxy.</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/businessready" target="_blank">World Bank B-Ready</a></div>
+    </div>
+
+    <div class="card borderND">
+      <div class="card-sub">Business Environment</div>
+      <div class="card-title">B-Ready — Operational Efficiency</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">n/a</span>
+          <span class="unit">not assessed</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥70/100 efficient; ≥85 best practice.</div>
+      <div class="card-missing">Not yet covered by B-Ready. World Bank Enterprise Survey 2023 provides operational-efficiency proxies (time-tax, days to obtain electricity) and can backfill until B-Ready coverage extends.</div>
+      <div class="card-source">📊 <a href="https://www.worldbank.org/en/businessready" target="_blank">World Bank B-Ready</a></div>
+    </div>
+
+  </div>
+
+  <!-- PILLAR V: FINANCIAL MARKET DIAGNOSTICS -->
+  <div class="section-header">
+    <div class="section-dot dot-fmd"></div>
+    <h2>Pillar V — Financial Market Diagnostics</h2>
+    <span class="indicator-count">7 of 8 scored</span>
+    <div class="score-chip" style="background:var(--crimson);">Capital Strong, Credit Stuck</div>
+  </div>
+  <div class="indicators-grid">
+
+    <div class="card borderND">
+      <div class="card-sub">Risk Premium</div>
+      <div class="card-title">Sovereign Credit Rating</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--muted)">Unrated</span>
+          <span class="unit">no S&amp;P / Moody's / Fitch rating</span>
+        </div>
+        <div class="card-score-badge nd">n/d</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> BBB- = investment grade; BB- and above = sub-IG with market access.</div>
+      <div class="card-imf">Post-HIPC and with strong ECF performance, a first sovereign rating becomes a credible medium-term ambition. DSA classifies Somalia at <strong>moderate risk of debt distress</strong>. CBS preparatory work on shilling reintroduction and currency board could be a milestone toward rating eligibility.</div>
+      <div class="card-missing">Somalia remains unrated. Per scoring rubric, unrated = 1. Treat as a near-term policy goal in donor dialogue.</div>
+      <div class="card-source">📊 <a href="https://disclosure.spglobal.com/ratings/en/regulatory/ratings-actions" target="_blank">S&amp;P Global Ratings</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Maturity Structure</div>
+      <div class="card-title">Average Maturity of External Private Debt</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">14.9 yr</span>
+          <span class="unit">avg maturity</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥10 years adequate for infrastructure; &lt;5 years = rollover risk.</div>
+      <div class="card-imf">World Bank policy shift to <strong>100% concessional loans with 50-year maturity</strong> from July 2025 will further extend Somalia's average debt maturity. Reflects narrow, concessional debt base rather than deep private market.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Long tenor reflects narrow base — largely IFI/concessional</div>
+      <div class="card-conversation">14.9 years average maturity is excellent on paper but reflects a concentrated, mostly concessional debt base. How will this benchmark evolve as Somalia gradually accesses commercial finance post-rating?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/DT.DOD.DECT.GN.ZS?locations=SO" target="_blank">World Bank IDS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 Tbl 1 fn 2</a></div>
+    </div>
+
+    <div class="card border2">
+      <div class="card-sub">Private Finance</div>
+      <div class="card-title">Domestic Private Investment as % of GDP</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score2)">5.3%</span>
+          <span class="unit">of GDP</span>
+        </div>
+        <div class="card-score-badge s2">2</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥15% GDP (IMF norm). Far below SSA average (~15%) and East Asia (~27%).</div>
+      <div class="card-imf">Credit to private sector at <strong>5.1% of GDP in 2024</strong>, growing to a projected 6.4% by 2029. <strong>Private sector credit grew 40% y-o-y in 2024Q2</strong> — rapid acceleration from a very low base.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Strong growth from low base; constrained by security, credit access, regulation</div>
+      <div class="card-conversation">5.3% private investment is well below SSA averages, but credit growth of 40% y-o-y is striking. What is the strategy for SME finance and risk-sharing facilities to sustain that growth trajectory?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/FS.AST.PRVT.GD.ZS?locations=SO" target="_blank">WDI — FS.AST.PRVT.GD.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶9</a></div>
+    </div>
+
+    <div class="card border3">
+      <div class="card-sub">Firm Constraints</div>
+      <div class="card-title">% Firms Fully Credit Constrained</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score3)">28.2%</span>
+          <span class="unit">of surveyed firms</span>
+        </div>
+        <div class="card-score-badge s3">3</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;10% well-functioning credit market; &gt;30% severe constraint on private sector.</div>
+      <div class="card-imf">CBS issued banking regulations on capital adequacy and liquidity coverage (Jan 2024) — sets the foundation for credit market development. <strong>Ziraat Bank (Türkiye) became operational late 2023</strong>; second foreign bank expected 2025Q1.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Collateral, ID, and credit-information gaps dominate; entry of foreign banks may improve</div>
+      <div class="card-conversation">28% credit constraint sits at the boundary of moderate/severe. Where are the highest-leverage interventions: credit reference bureau, moveable collateral registry, or partial credit guarantee schemes? Are entering foreign banks targeting SME segments?</div>
+      <div class="card-source">📊 <a href="https://www.enterprisesurveys.org/en/data/exploreeconomies/2023/somalia" target="_blank">World Bank Enterprise Surveys</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶9</a></div>
+    </div>
+
+    <div class="card border1">
+      <div class="card-sub">Firm Constraints</div>
+      <div class="card-title">% Firms Citing Unfavourable Loan Conditions</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score1)">69.1%</span>
+          <span class="unit">of surveyed firms</span>
+        </div>
+        <div class="card-score-badge s1">1</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;15% reasonable; &gt;40% systemic lending constraint. Somalia at 69% indicates near-universal perception problem.</div>
+      <div class="card-imf">IMF emphasises "<strong>promote financial deepening and financial inclusion</strong>" as a priority. CBS issued guidance on Know-Your-Customer (KYC) and is building Islamic banking regulatory capacity to expand Sharia-compliant product offering.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Pricing and collateral terms cited far more than pure availability</div>
+      <div class="card-conversation">When 7 in 10 firms cite loan conditions as a barrier — combined with healthy bank capitalisation and a 40% y-o-y growth in private credit — the issue is the price and structure of credit, not bank balance sheets. How is Sharia-compliant SME product design progressing under CBS's expanded supervisory capacity?</div>
+      <div class="card-source">📊 <a href="https://www.enterprisesurveys.org/en/data/exploreeconomies/2023/somalia" target="_blank">World Bank Enterprise Surveys</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶36</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Banking Sector</div>
+      <div class="card-title">Non-Performing Loans (NPL) Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">3.4%</span>
+          <span class="unit">of loans (IMF 2024Q2)</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> &lt;5% Basel III norm; &gt;20% systemic. Score 4 (3–5%) reflects healthy banking system, though Somalia's low-penetration context means low NPLs partly reflect conservative lending.</div>
+      <div class="card-imf"><strong>NPLs at 3.4% as of 2024Q2</strong> (IMF Art. IV) — up from the 2.5% in earlier datasets but still well within healthy range. IMF notes "<strong>systemwide bank capital and liquidity at comfortable levels</strong>." Recent dataset value (3.4%) supersedes the earlier 2.53% figure.</div>
+      <div class="card-trend"><span class="trend-arrow trend-flat">→</span> Slight increase from 2.5% prior; remains within healthy Basel range</div>
+      <div class="card-conversation">3.4% NPLs combined with 40% credit growth is a healthy combination. Is the CBS confident in asset quality classification methodology across the sector, particularly for newer foreign-bank entrants?</div>
+      <div class="card-source">📊 <a href="https://data.imf.org/regular.aspx?key=61404588" target="_blank">IMF Financial Soundness Indicators</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶9</a></div>
+    </div>
+
+    <div class="card border5">
+      <div class="card-sub">Banking Sector</div>
+      <div class="card-title">Customer Deposits to Total Loans Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score5)">301.9%</span>
+          <span class="unit">deposits / loans</span>
+        </div>
+        <div class="card-score-badge s5">5</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥80% stable deposit-funded lending. <em>Ratio above 200% indicates massive excess deposits relative to lending — abundant liquidity but limited intermediation to the real economy.</em></div>
+      <div class="card-imf">IMF Tbl 3a: <strong>loan-to-deposit ratio at 37% in 2024Q2</strong> (i.e. deposits ~270% of loans, consistent with framework's 302% figure). Deposits at 14.1% of GDP and growing. Excess liquidity locked in CBS reserves and short-term placements.</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Loan-to-deposit ratio rising slowly (33% in 2020 → 37% in 2024Q2)</div>
+      <div class="card-conversation">A 302% deposit-to-loan ratio (37% loan-to-deposit) is a flashing red light, not a strength: deposits dwarf lending by 3×. The banking system holds the resources to fund private investment but is not intermediating. What "plumbing" reforms (collateral registry, credit bureau, contract enforcement) are sequenced under the IMF programme?</div>
+      <div class="card-source">📊 <a href="https://data.imf.org/regular.aspx?key=61404588" target="_blank">IMF FSI</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 Tbl 3a</a></div>
+    </div>
+
+    <div class="card border4">
+      <div class="card-sub">Banking Sector</div>
+      <div class="card-title">Bank Capital to Assets Ratio</div>
+      <div class="card-values">
+        <div class="card-current">
+          <span class="label">Current Value</span>
+          <span class="value" style="color:var(--score4)">13.7%</span>
+          <span class="unit">capital / assets</span>
+        </div>
+        <div class="card-score-badge s4">4</div>
+      </div>
+      <div class="card-benchmark"><strong>Benchmark:</strong> ≥8% Basel III minimum; ≥10% adequate; ≥15% strong.</div>
+      <div class="card-imf">IMF confirms <strong>"systemwide bank capital and liquidity at comfortable levels"</strong> (Art. IV ¶9). CBS issued risk-weighted capital adequacy regulation in Jan 2024 incorporating credit and operational risk; further LCR/CAR templates due end-July 2025 (SB#12).</div>
+      <div class="card-trend"><span class="trend-arrow trend-up">↑</span> Solid capital position above Basel minimum; regulatory framework being progressively tightened</div>
+      <div class="card-conversation">Banks are well-capitalised and liquid yet barely lending. The constraint is not bank balance sheets — it is the legal-collateral-information environment around them. With CBS supervisory capacity strengthening, what are the priority "plumbing" reforms in the next 12–18 months?</div>
+      <div class="card-source">📊 <a href="https://data.worldbank.org/indicator/FB.BNK.CAPA.ZS?locations=SO" target="_blank">WDI — FB.BNK.CAPA.ZS</a> <span class="src-sep">·</span> <a href="https://www.imf.org/en/Publications/CR/Issues/2024/11/18/Somalia-2024-Article-IV-Consultation-and-Second-Review-Under-the-Extended-Credit-Facility-557528" target="_blank">IMF CR 24/346 ¶9, ¶36</a></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p><strong>Sources &amp; Methodology:</strong> Indicators drawn from publicly available international databases (World Bank WDI, IMF WEO &amp; FSI, OECD DAC, WHO GHED, UNESCO UIS, Transparency International, World Bank Enterprise Surveys) and the <strong>IMF Country Report 24/346 — Somalia 2024 Article IV Consultation and Second Review Under the ECF (Nov 2024)</strong>. Individual indicator scores (1–5) reflect assessment against international benchmarks per the scorecard framework v1.2 rubric. Given that 8 of 25 indicators are unscored and coverage is uneven across pillars, this scorecard deliberately omits pillar-level and overall numeric averages — a single aggregate would imply a precision the underlying data does not support. Each pillar instead carries a qualitative summary capturing the pattern across its available indicators.</p>
+  <p style="margin-top:8px;"><strong>Data Completeness Caveat:</strong> 17 of 25 indicators are scored (68%). Pillar III (Spending Effectiveness) has no scored indicator — IMF Art. IV provides rich proxy evidence on PFM reforms that could support an analyst-scored value in the next iteration. Pillar IV (Enabling Environment) is scored on only 2 of 7 indicators; its qualitative summary should be read as indicative of a pattern, not a verdict.</p>
+  <p style="margin-top:8px;"><strong>IMF Art. IV Cross-Reference:</strong> Where IMF Article IV provides more recent or comprehensive data than the framework primary sources, this is flagged in-card with the 🏛 marker. Notable IMF/WDI divergences worth resolving in the next framework iteration: remittances (IMF 19.8% vs WDI 15.8%), public debt (IMF 6.4% vs framework 8.6%), and NPLs (IMF 3.4% vs framework 2.5%). National FfD/INFF Framework score (currently 1) likely understates progress given MTRR publication and NTP 2025–2029 preparation — recommend review.</p>
+  <p style="margin-top:8px;"><strong>Intended Use:</strong> This scorecard is a structured conversation starter for donor–government dialogue on FfD priorities. It is not an official government document. Data should be verified against primary sources before use in formal assessments.</p>
+  <p style="margin-top:8px;"><strong>Critical Context:</strong> Somalia is navigating a multi-front transition: post-HIPC fiscal rebuild, federal-state political settlement, ATMIS security transition (Jan 2025), Somali shilling reintroduction preparatory work, EAC accession discussions, and accelerating climate vulnerability. FfD dialogue should be framed around domestic revenue mobilisation, financial-sector deepening, and institutional capacity sequencing under the ECF programme.</p>
+</div>
+
+</body>
+</html>
